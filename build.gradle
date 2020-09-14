@@ -62,23 +62,17 @@ jar {
 curseforge {
 	apiKey = project.hasProperty("curseForgeApiKey") ? project.curseForgeApiKey : "empty"
 	project {
-		id = '408081'
+		id = '000000'
 		changelog = file('changelog.txt')
 		releaseType = 'release'
 		addGameVersion '1.16.3'
 		addGameVersion '1.16.2'
 		addGameVersion '1.16.1'
 		addGameVersion '1.16'
-		addGameVersion '1.16-snapshot'
-		addGameVersion '1.15.2'
-		addGameVersion '1.14.4'
 		addGameVersion 'Java 8'
 		addGameVersion 'Fabric'
 		mainArtifact(new File(new File(buildDir, "libs"), "$archivesBaseName-${version}.jar")) {
 			displayName = "$archivesBaseName-$version"
-			relations {
-				requiredDependency 'fabric-api'
-			}
 		}
 	}
 	options {
