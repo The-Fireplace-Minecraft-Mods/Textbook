@@ -70,7 +70,7 @@ public abstract class BookEditScreenMixin extends Screen {
 			int maxVolume = (int)Math.ceil(pages.size() / 100d);
 			if(title.length() > 15-String.valueOf(maxVolume).length())
 				this.title = title.substring(0, 15-String.valueOf(maxVolume).length());
-			this.title += "-"+String.format("%0"+(maxVolume/10)+"d", selectedVolume);
+			this.title += "-"+String.format("%0"+String.valueOf(maxVolume).length()+"d", selectedVolume);
 			updateButtons();
 		}));
 		upArrow = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 2, 20, 20, Text.of("^"), (buttonWidget) -> {
