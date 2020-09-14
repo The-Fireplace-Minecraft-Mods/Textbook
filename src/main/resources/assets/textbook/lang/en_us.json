@@ -1,4 +1,6 @@
 {
   "gui.textbook.import": "Import from file",
-  "gui.textbook.export": "Export to file"
+  "gui.textbook.export": "Export to file",
+  "gui.textbook.import.dialog_title": "Import from text file",
+  "gui.textbook.import.text_files": "text files"
 }

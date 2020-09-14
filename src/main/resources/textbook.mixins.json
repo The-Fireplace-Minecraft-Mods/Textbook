@@ -4,6 +4,7 @@
   "package": "the_fireplace.textbook.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "BookEditScreenMixin",
     "BookScreenMixin"
   ],
   "injectors": {

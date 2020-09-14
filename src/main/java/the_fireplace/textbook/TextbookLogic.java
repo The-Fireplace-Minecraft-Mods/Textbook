@@ -4,9 +4,9 @@ import com.google.common.collect.Lists;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.TranslatableText;
+import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -17,16 +17,16 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public class TextbookLogic {
     public static File getFile() {
-        final JFileChooser fc = new JFileChooser();
-        fc.addChoosableFileFilter(new FileNameExtensionFilter("Text files", "txt"));
-        fc.showOpenDialog(null);
-        return fc.getSelectedFile();
+        String file = TinyFileDialogs.tinyfd_openFileDialog(new TranslatableText("gui.textbook.import.dialog_title").getString(), null, null, new TranslatableText("gui.textbook.import.text_files").getString(), false);
+        if(file == null)
+            return null;
+        return new File(file);
     }
 
     public static List<String> importContents(File file) {
         List<String> lines = Lists.newArrayList();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file), 1000);
+            BufferedReader reader = new BufferedReader(new FileReader(file), 5000);
             String st;
             while ((st = reader.readLine()) != null)
                 lines.add(st);
@@ -43,7 +43,7 @@ public class TextbookLogic {
         StringBuilder page = new StringBuilder();
         for(String line: lines) {
             if(fitsOnPage(page+line))
-                page.append(line);
+                page.append(line).append("\n");
             else if(!fitsOnPage(line)) {
                 String[] parts = line.split(" ");
                 StringBuilder addPart = new StringBuilder();
@@ -81,6 +81,7 @@ public class TextbookLogic {
             } else {
                 pages.add(page.toString());
                 page = new StringBuilder();
+                page.append(line).append("\n");
             }
         }
         if(!page.toString().isEmpty())
