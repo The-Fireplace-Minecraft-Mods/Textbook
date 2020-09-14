@@ -31,7 +31,7 @@ public class TextbookLogic {
     public static void exportContents(File file, BookScreen.Contents contents) {
         StringBuilder output = new StringBuilder();
         for(int i=0;i<contents.getPageCount();i++)
-            output.append(contents.getPage(i)).append("\r\n");
+            output.append(contents.getPage(i).getString().replaceAll("\\R", "\r\n")).append(" ");
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             writer.write(output.toString());
