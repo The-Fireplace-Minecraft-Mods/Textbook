@@ -4,23 +4,41 @@ import com.google.common.collect.Lists;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.BookScreen;
 import net.minecraft.text.TranslatableText;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Collections;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class TextbookLogic {
-    public static File getFile() {
+    public static File fileOpenSelectionDialog() {
         String file = TinyFileDialogs.tinyfd_openFileDialog(new TranslatableText("gui.textbook.import.dialog_title").getString(), null, null, new TranslatableText("gui.textbook.import.text_files").getString(), false);
         if(file == null)
             return null;
         return new File(file);
+    }
+
+    public static File fileSaveSelectionDialog() {
+        String file = TinyFileDialogs.tinyfd_saveFileDialog(new TranslatableText("gui.textbook.export.dialog_title").getString(), null, null, null);
+        if(file == null)
+            return null;
+        return new File(file);
+    }
+
+    public static void exportContents(File file, BookScreen.Contents contents) {
+        StringBuilder output = new StringBuilder();
+        for(int i=0;i<contents.getPageCount();i++)
+            output.append(contents.getPage(i)).append("\r\n");
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(output.toString());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static List<String> importContents(File file) {

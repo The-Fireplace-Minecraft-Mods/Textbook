@@ -4,6 +4,7 @@
   "gui.textbook.export": "Export to file",
   "gui.textbook.import.dialog_title": "Import from text file",
   "gui.textbook.import.text_files": "text files",
+  "gui.textbook.export.dialog_title": "Export to text file",
   "gui.textbook.volume_confirm": "Select Volume %s of %s.",
   "gui.textbook.volume_up": "Volume Number Up",
   "gui.textbook.volume_down": "Volume Number Down"

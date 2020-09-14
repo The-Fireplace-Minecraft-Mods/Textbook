@@ -1,18 +1,33 @@
 package the_fireplace.textbook.mixin;
 
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import the_fireplace.textbook.TextbookLogic;
+
+import java.io.File;
 
 @Mixin(BookScreen.class)
-public abstract class BookScreenMixin {
+public abstract class BookScreenMixin extends Screen {
+	protected BookScreenMixin(Text title) {
+		super(title);
+	}
+
 	@Shadow private BookScreen.Contents contents;
 
-	@Inject(at = @At(value="HEAD"), method = "keyPressed")
-	private void keyPressed(CallbackInfoReturnable<Boolean> infoReturnable) {
-
+	@Inject(at = @At(value="TAIL"), method = "init")
+	private void init(CallbackInfo info) {
+		this.addButton(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, new TranslatableText("gui.textbook.export"), (buttonWidget) -> {
+			File exportFile = TextbookLogic.fileSaveSelectionDialog();
+			if(exportFile != null)
+				TextbookLogic.exportContents(exportFile, contents);
+		}));
 	}
 }

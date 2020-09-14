@@ -37,7 +37,6 @@ public abstract class BookEditScreenMixin extends Screen {
 	@Shadow protected abstract void updateButtons();
 
 	private ButtonWidget importButton;
-	private ButtonWidget clipboardImportButton;
 	private ButtonWidget volumeConfirmButton;
 	private int selectedVolume = 1;
 	private ButtonWidget upArrow;
@@ -51,7 +50,7 @@ public abstract class BookEditScreenMixin extends Screen {
 	@Inject(at = @At(value="TAIL"), method = "init")
 	private void init(CallbackInfo info) {
 		importButton = this.addButton(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, new TranslatableText("gui.textbook.import"), (buttonWidget) -> {
-			File importFile = TextbookLogic.getFile();
+			File importFile = TextbookLogic.fileOpenSelectionDialog();
 			if(importFile != null) {
 				this.pages = TextbookLogic.toPages(TextbookLogic.importContents(importFile));
 				this.removeEmptyPages();
@@ -64,7 +63,7 @@ public abstract class BookEditScreenMixin extends Screen {
 				updateButtons();
 			}
 		}));
-		clipboardImportButton = this.addButton(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.import_clip"), (buttonWidget) -> {
+		this.addButton(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.import_clip"), (buttonWidget) -> {
 			assert this.client != null;
 			this.pages = TextbookLogic.toPages(Lists.newArrayList(this.client.keyboard.getClipboard().split("\\R")));
 			this.removeEmptyPages();
