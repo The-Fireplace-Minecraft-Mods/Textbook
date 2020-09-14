@@ -37,6 +37,7 @@ public abstract class BookEditScreenMixin extends Screen {
 	@Shadow protected abstract void updateButtons();
 
 	private ButtonWidget importButton;
+	private ButtonWidget clipboardImportButton;
 	private ButtonWidget volumeConfirmButton;
 	private int selectedVolume = 1;
 	private ButtonWidget upArrow;
@@ -62,6 +63,14 @@ public abstract class BookEditScreenMixin extends Screen {
 					this.title = title.substring(0, 16);
 				updateButtons();
 			}
+		}));
+		clipboardImportButton = this.addButton(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.import_clip"), (buttonWidget) -> {
+			assert this.client != null;
+			this.pages = TextbookLogic.toPages(Lists.newArrayList(this.client.keyboard.getClipboard().split("\\R")));
+			this.removeEmptyPages();
+			this.dirty = true;
+			this.invalidatePageContent();
+			updateButtons();
 		}));
 		volumeConfirmButton = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)), (buttonWidget) -> {
 			this.pages = Lists.partition(this.pages, 100).get(selectedVolume-1);
