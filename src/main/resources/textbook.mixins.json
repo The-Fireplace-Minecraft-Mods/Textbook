@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "the_fireplace.textbook.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "BookScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

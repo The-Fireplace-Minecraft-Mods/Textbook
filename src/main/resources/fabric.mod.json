@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "textbook",
+  "version": "${version}",
+
+  "name": "Textbook",
+  "description": "Import books from and export books to text files.",
+  "authors": [
+    "The_Fireplace"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/textbook",
+    "sources": "https://github.com/The-Fireplace-Minecraft-Mods/Textbook",
+    "issues": "https://github.com/The-Fireplace-Minecraft-Mods/Textbook/issues"
+  },
+
+  "license": "GPL-3.0-or-later",
+  "icon": "assets/textbook/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "the_fireplace.textbook.Textbook"
+    ]
+  },
+  "mixins": [
+    "textbook.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "*"
+  }
+}
