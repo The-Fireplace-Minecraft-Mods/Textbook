@@ -8,6 +8,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.SelectionManager;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -15,13 +16,16 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import the_fireplace.textbook.Textbook;
 import the_fireplace.textbook.TextbookLogic;
 
 import java.io.File;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Mixin(BookEditScreen.class)
 public abstract class BookEditScreenMixin extends Screen {
+	private static final Pattern CARRIAGE_RETURN = Pattern.compile("\\R");
 	@Mutable
 	@Shadow @Final private List<String> pages;
 
@@ -52,47 +56,9 @@ public abstract class BookEditScreenMixin extends Screen {
 
 	@Inject(at = @At(value="TAIL"), method = "init")
 	private void init(CallbackInfo info) {
-		importButton = this.addButton(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, new TranslatableText("gui.textbook.import"), (buttonWidget) -> {
-			File importFile = TextbookLogic.fileOpenSelectionDialog();
-			if (importFile != null) {
-				this.currentPage = 0;
-				this.pages = TextbookLogic.toPages(TextbookLogic.importContents(importFile));
-				this.removeEmptyPages();
-				this.currentPageSelectionManager.moveCaretToEnd();
-				this.dirty = true;
-				this.invalidatePageContent();
-				//noinspection UnstableApiUsage
-				this.title = Files.getNameWithoutExtension(importFile.getName());
-				if (title.length() > 16)
-					this.title = title.substring(0, 16);
-				updateButtons();
-			}
-		}));
-		this.addButton(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.import_clip"), (buttonWidget) -> {
-			assert this.client != null;
-			this.currentPage = 0;
-			this.pages = TextbookLogic.toPages(Lists.newArrayList(this.client.keyboard.getClipboard().split("\\R")));
-			this.removeEmptyPages();
-			this.currentPageSelectionManager.moveCaretToEnd();
-			this.dirty = true;
-			this.invalidatePageContent();
-			updateButtons();
-		}));
-		volumeConfirmButton = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)), (buttonWidget) -> {
-			this.currentPage = 0;
-			this.pages = Lists.partition(this.pages, 100).get(selectedVolume-1);
-			this.currentPageSelectionManager.moveCaretToEnd();
-			this.dirty = true;
-			this.invalidatePageContent();
-			int maxVolume = (int)Math.ceil(pages.size() / 100d);
-			if (title.length() > 15-String.valueOf(maxVolume).length()) {
-				this.title = title.substring(0, 15 - String.valueOf(maxVolume).length());
-			}
-			if (!title.isEmpty()) {
-				this.title += "-" + String.format("%0" + String.valueOf(maxVolume).length() + "d", selectedVolume);
-			}
-			updateButtons();
-		}));
+		importButton = this.addButton(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, new TranslatableText("gui.textbook.import"), this::importFileText));
+		this.addButton(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.import_clip"), this::importClipboardText));
+		volumeConfirmButton = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)), this::confirmVolumeSelection));
 		upArrow = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 2, 20, 20, Text.of("^"), (buttonWidget) -> {
 			selectedVolume++;
 			updateButtons();
@@ -116,5 +82,59 @@ public abstract class BookEditScreenMixin extends Screen {
 			upArrow.active = selectedVolume < maxVolume;
 			downArrow.active = selectedVolume > minVolume;
 		}
+	}
+
+	private void confirmVolumeSelection(ButtonWidget buttonWidget) {
+		int maxVolumeDigits = String.valueOf((int) Math.ceil(pages.size() / 100d)).length();
+		setPages(Lists.partition(this.pages, 100).get(selectedVolume - 1));
+		appendVolumeToTitle(maxVolumeDigits);
+		updateButtons();
+	}
+
+	private void appendVolumeToTitle(int digits) {
+		if (title.isEmpty()) {
+			return;
+		}
+		if (digits > 15) {
+			LogManager.getLogger(Textbook.MODID).info("Do you really need to import that much text? That's a {} digit number. How will you even label the volumes accurately?", digits);
+			digits = 15;
+		}
+		if (title.length() > 15 - digits) {
+			this.title = title.substring(0, 15 - digits);
+		}
+		if (!title.isEmpty()) {
+			this.title += "-" + String.format("%0" + digits + "d", selectedVolume);
+		}
+	}
+
+	private void importFileText(ButtonWidget buttonWidget) {
+		File importFile = TextbookLogic.fileOpenSelectionDialog();
+		if (importFile != null) {
+			importText(TextbookLogic.importContents(importFile));
+			//noinspection UnstableApiUsage
+			this.title = Files.getNameWithoutExtension(importFile.getName());
+			if (title.length() > 16) {
+				this.title = title.substring(0, 16);
+			}
+		}
+	}
+
+	private void importClipboardText(ButtonWidget buttonWidget) {
+		assert this.client != null;
+		importText(Lists.newArrayList(CARRIAGE_RETURN.split(this.client.keyboard.getClipboard())));
+	}
+
+	private void importText(List<String> lines) {
+		setPages(TextbookLogic.toPages(lines));
+	}
+
+	private void setPages(List<String> pages) {
+		this.currentPage = 0;
+		this.pages = pages;
+		this.removeEmptyPages();
+		this.currentPageSelectionManager.moveCaretToEnd();
+		this.dirty = true;
+		this.invalidatePageContent();
+		updateButtons();
 	}
 }
