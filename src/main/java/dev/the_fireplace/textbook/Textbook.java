@@ -1,4 +1,4 @@
-package the_fireplace.textbook;
+package dev.the_fireplace.textbook;
 
 import net.fabricmc.api.ClientModInitializer;
 

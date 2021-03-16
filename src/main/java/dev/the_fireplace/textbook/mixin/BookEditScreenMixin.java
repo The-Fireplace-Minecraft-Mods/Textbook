@@ -1,7 +1,9 @@
-package the_fireplace.textbook.mixin;
+package dev.the_fireplace.textbook.mixin;
 
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
+import dev.the_fireplace.textbook.Textbook;
+import dev.the_fireplace.textbook.TextbookLogic;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.BookEditScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -16,8 +18,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import the_fireplace.textbook.Textbook;
-import the_fireplace.textbook.TextbookLogic;
 
 import java.io.File;
 import java.util.List;

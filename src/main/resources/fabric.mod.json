@@ -20,7 +20,7 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "the_fireplace.textbook.Textbook"
+      "dev.the_fireplace.textbook.Textbook"
     ]
   },
   "mixins": [
