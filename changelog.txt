@@ -1,1 +1,6 @@
-Initial Release
+Additions:
+
+Changes:
+
+Fixes/Internal Changes:
+Fixed occasional crash when trying to import text

@@ -5,6 +5,7 @@ import com.google.common.io.Files;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.BookEditScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.SelectionManager;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import org.spongepowered.asm.mixin.Final;
@@ -36,6 +37,8 @@ public abstract class BookEditScreenMixin extends Screen {
 
 	@Shadow protected abstract void updateButtons();
 
+	@Shadow @Final private SelectionManager currentPageSelectionManager;
+	@Shadow private int currentPage;
 	private ButtonWidget importButton;
 	private ButtonWidget volumeConfirmButton;
 	private int selectedVolume = 1;
@@ -52,8 +55,10 @@ public abstract class BookEditScreenMixin extends Screen {
 		importButton = this.addButton(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, new TranslatableText("gui.textbook.import"), (buttonWidget) -> {
 			File importFile = TextbookLogic.fileOpenSelectionDialog();
 			if (importFile != null) {
+				this.currentPage = 0;
 				this.pages = TextbookLogic.toPages(TextbookLogic.importContents(importFile));
 				this.removeEmptyPages();
+				this.currentPageSelectionManager.moveCaretToEnd();
 				this.dirty = true;
 				this.invalidatePageContent();
 				//noinspection UnstableApiUsage
@@ -65,20 +70,27 @@ public abstract class BookEditScreenMixin extends Screen {
 		}));
 		this.addButton(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.import_clip"), (buttonWidget) -> {
 			assert this.client != null;
+			this.currentPage = 0;
 			this.pages = TextbookLogic.toPages(Lists.newArrayList(this.client.keyboard.getClipboard().split("\\R")));
 			this.removeEmptyPages();
+			this.currentPageSelectionManager.moveCaretToEnd();
 			this.dirty = true;
 			this.invalidatePageContent();
 			updateButtons();
 		}));
 		volumeConfirmButton = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)), (buttonWidget) -> {
+			this.currentPage = 0;
 			this.pages = Lists.partition(this.pages, 100).get(selectedVolume-1);
+			this.currentPageSelectionManager.moveCaretToEnd();
 			this.dirty = true;
 			this.invalidatePageContent();
 			int maxVolume = (int)Math.ceil(pages.size() / 100d);
-			if(title.length() > 15-String.valueOf(maxVolume).length())
-				this.title = title.substring(0, 15-String.valueOf(maxVolume).length());
-			this.title += "-"+String.format("%0"+String.valueOf(maxVolume).length()+"d", selectedVolume);
+			if (title.length() > 15-String.valueOf(maxVolume).length()) {
+				this.title = title.substring(0, 15 - String.valueOf(maxVolume).length());
+			}
+			if (!title.isEmpty()) {
+				this.title += "-" + String.format("%0" + String.valueOf(maxVolume).length() + "d", selectedVolume);
+			}
 			updateButtons();
 		}));
 		upArrow = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 2, 20, 20, Text.of("^"), (buttonWidget) -> {
