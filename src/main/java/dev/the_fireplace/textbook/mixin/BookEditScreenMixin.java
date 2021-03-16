@@ -10,7 +10,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.SelectionManager;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -96,7 +95,7 @@ public abstract class BookEditScreenMixin extends Screen {
 			return;
 		}
 		if (digits > 15) {
-			LogManager.getLogger(Textbook.MODID).info("Do you really need to import that much text? That's a {} digit number. How will you even label the volumes accurately?", digits);
+			Textbook.getLogger().info("Do you really need to import that much text? That's a {} digit number. How will you even label the volumes accurately?", digits);
 			digits = 15;
 		}
 		if (title.length() > 15 - digits) {

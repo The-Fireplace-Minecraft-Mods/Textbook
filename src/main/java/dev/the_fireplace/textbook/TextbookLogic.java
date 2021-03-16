@@ -45,7 +45,7 @@ public class TextbookLogic {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(output.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            Textbook.getLogger().error("Unable to export to file!", e);
         }
     }
 
@@ -57,7 +57,7 @@ public class TextbookLogic {
                 lines.add(st);
             }
         } catch(IOException e) {
-            e.printStackTrace();
+            Textbook.getLogger().error("Unable to import from file!", e);
             return Collections.emptyList();
         }
         return lines;
