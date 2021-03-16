@@ -1,6 +1,8 @@
 Additions:
 
 Changes:
+The current volume will now be remembered between books for easier importing of one volume after another
 
 Fixes/Internal Changes:
 Fixed occasional crash when trying to import text
+Fixed import from clipboard being visible on the signing screen

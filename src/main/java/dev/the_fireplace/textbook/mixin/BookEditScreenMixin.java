@@ -43,8 +43,9 @@ public abstract class BookEditScreenMixin extends Screen {
 	@Shadow @Final private SelectionManager currentPageSelectionManager;
 	@Shadow private int currentPage;
 	private ButtonWidget importButton;
+	private ButtonWidget importClipboardButton;
 	private ButtonWidget volumeConfirmButton;
-	private int selectedVolume = 1;
+	private static int selectedVolume = 1;
 	private ButtonWidget upArrow;
 	private ButtonWidget downArrow;
 	private boolean textbookButtonsInitialized = false;
@@ -56,7 +57,7 @@ public abstract class BookEditScreenMixin extends Screen {
 	@Inject(at = @At(value="TAIL"), method = "init")
 	private void init(CallbackInfo info) {
 		importButton = this.addButton(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, new TranslatableText("gui.textbook.import"), this::importFileText));
-		this.addButton(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.import_clip"), this::importClipboardText));
+		importClipboardButton = this.addButton(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.import_clip"), this::importClipboardText));
 		volumeConfirmButton = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)), this::confirmVolumeSelection));
 		upArrow = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 2, 20, 20, Text.of("^"), (buttonWidget) -> {
 			selectedVolume++;
@@ -74,12 +75,17 @@ public abstract class BookEditScreenMixin extends Screen {
 	private void updateButtons(CallbackInfo ci) {
 		if (textbookButtonsInitialized) {
 			volumeConfirmButton.setMessage(new TranslatableText("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)));
-			importButton.visible = !this.signing;
-			upArrow.visible = downArrow.visible = volumeConfirmButton.visible = !this.signing && pages.size() > 100;
-			int maxVolume = (int) Math.ceil(pages.size() / 100d);
-			int minVolume = 1;
-			upArrow.active = selectedVolume < maxVolume;
-			downArrow.active = selectedVolume > minVolume;
+			importButton.visible = importClipboardButton.visible = !this.signing;
+			int totalVolumeCount = (int) Math.ceil(pages.size() / 100d);
+			boolean showVolumeSelector = !this.signing && totalVolumeCount > 1;
+			upArrow.visible = downArrow.visible = volumeConfirmButton.visible = showVolumeSelector;
+			if (showVolumeSelector) {
+				if (selectedVolume > totalVolumeCount) {
+					selectedVolume = 1;
+				}
+				upArrow.active = selectedVolume < totalVolumeCount;
+				downArrow.active = selectedVolume > 1;
+			}
 		}
 	}
 
