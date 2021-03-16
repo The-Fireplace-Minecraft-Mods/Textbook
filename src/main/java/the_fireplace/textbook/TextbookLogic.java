@@ -8,34 +8,42 @@ import net.minecraft.client.gui.screen.ingame.BookScreen;
 import net.minecraft.text.TranslatableText;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
+import javax.annotation.Nullable;
 import java.io.*;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Environment(EnvType.CLIENT)
 public class TextbookLogic {
+    private static final Pattern NEWLINE_REGEX = Pattern.compile("\\R");
+
+    @Nullable
     public static File fileOpenSelectionDialog() {
         String file = TinyFileDialogs.tinyfd_openFileDialog(new TranslatableText("gui.textbook.import.dialog_title").getString(), null, null, new TranslatableText("gui.textbook.import.text_files").getString(), false);
-        if(file == null)
+        if (file == null) {
             return null;
+        }
         return new File(file);
     }
 
+    @Nullable
     public static File fileSaveSelectionDialog() {
         String file = TinyFileDialogs.tinyfd_saveFileDialog(new TranslatableText("gui.textbook.export.dialog_title").getString(), null, null, null);
-        if(file == null)
+        if (file == null) {
             return null;
+        }
         return new File(file);
     }
 
     public static void exportContents(File file, BookScreen.Contents contents) {
         StringBuilder output = new StringBuilder();
-        for(int i=0;i<contents.getPageCount();i++)
-            output.append(contents.getPage(i).getString().replaceAll("\\R", "\r\n")).append(" ");
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        for (int pageIndex = 0; pageIndex < contents.getPageCount(); pageIndex++) {
+            //noinspection HardcodedLineSeparator
+            output.append(NEWLINE_REGEX.matcher(contents.getPage(pageIndex).getString()).replaceAll("\r\n")).append(" ");
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(output.toString());
-            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,12 +51,11 @@ public class TextbookLogic {
 
     public static List<String> importContents(File file) {
         List<String> lines = Lists.newArrayList();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file), 5000);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file), 5000)) {
             String st;
-            while ((st = reader.readLine()) != null)
+            while ((st = reader.readLine()) != null) {
                 lines.add(st);
-            reader.close();
+            }
         } catch(IOException e) {
             e.printStackTrace();
             return Collections.emptyList();
@@ -60,13 +67,14 @@ public class TextbookLogic {
         List<String> pages = Lists.newArrayList();
         StringBuilder page = new StringBuilder();
         for(String line: lines) {
-            if(fitsOnPage(page+line))
+            if (fitsOnPage(page+line)) {
+                //noinspection HardcodedLineSeparator
                 page.append(line).append("\n");
-            else if(!fitsOnPage(line)) {
+            } else if (!fitsOnPage(line)) {
                 String[] parts = line.split(" ");
                 StringBuilder addPart = new StringBuilder();
                 for(String part: parts) {
-                    if (fitsOnPage(page.toString() + addPart.toString() + part + " ")) {
+                    if (fitsOnPage(page + addPart.toString() + part + " ")) {
                         addPart.append(part).append(" ");
                     } else {
                         if (!page.toString().isEmpty() || !addPart.toString().isEmpty()) {
@@ -85,25 +93,29 @@ public class TextbookLogic {
                                 }
                                 page.append(c);
                             }
-                            if (fitsOnPage(page.toString() + " "))
+                            if (fitsOnPage(page + " ")) {
                                 page.append(" ");
-                            else {
+                            } else {
                                 pages.add(page.toString());
                                 page = new StringBuilder();
                             }
                         }
                     }
                 }
-                if(!addPart.toString().isEmpty())
+                if (!addPart.toString().isEmpty()) {
                     page.append(addPart);
+                }
             } else {
                 pages.add(page.toString());
                 page = new StringBuilder();
+                //noinspection HardcodedLineSeparator
                 page.append(line).append("\n");
             }
         }
-        if(!page.toString().isEmpty())
+        if (!page.toString().isEmpty()) {
             pages.add(page.toString());
+        }
+
         return pages;
     }
 
