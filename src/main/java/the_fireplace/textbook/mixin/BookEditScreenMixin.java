@@ -51,14 +51,14 @@ public abstract class BookEditScreenMixin extends Screen {
 	private void init(CallbackInfo info) {
 		importButton = this.addButton(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, new TranslatableText("gui.textbook.import"), (buttonWidget) -> {
 			File importFile = TextbookLogic.fileOpenSelectionDialog();
-			if(importFile != null) {
+			if (importFile != null) {
 				this.pages = TextbookLogic.toPages(TextbookLogic.importContents(importFile));
 				this.removeEmptyPages();
 				this.dirty = true;
 				this.invalidatePageContent();
 				//noinspection UnstableApiUsage
 				this.title = Files.getNameWithoutExtension(importFile.getName());
-				if(title.length() > 16)
+				if (title.length() > 16)
 					this.title = title.substring(0, 16);
 				updateButtons();
 			}
@@ -95,7 +95,7 @@ public abstract class BookEditScreenMixin extends Screen {
 
 	@Inject(at = @At("TAIL"), method = "updateButtons")
 	private void updateButtons(CallbackInfo ci) {
-		if(textbookButtonsInitialized) {
+		if (textbookButtonsInitialized) {
 			volumeConfirmButton.setMessage(new TranslatableText("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)));
 			importButton.visible = !this.signing;
 			upArrow.visible = downArrow.visible = volumeConfirmButton.visible = !this.signing && pages.size() > 100;

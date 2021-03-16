@@ -1,6 +1,13 @@
 plugins {
-	id 'fabric-loom' version '0.4-SNAPSHOT'
+	// Dependencies
+	id 'fabric-loom' version '0.6-SNAPSHOT'
+	// Mod Hosting Publish
 	id "com.matthewprenger.cursegradle" version "1.4.0"
+	id "com.modrinth.minotaur" version "1.1.0"
+	// Maven Publish
+	id 'maven'
+	id 'signing'
+	id 'io.codearte.nexus-staging' version '0.22.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -11,20 +18,29 @@ version = project.mod_version
 group = project.maven_group
 
 dependencies {
-	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	modImplementation "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}"
 
 	compile "com.google.code.findbugs:jsr305:3.0.2"
 }
 
 repositories {
-	//Auto config
-	jcenter()
+	maven {
+		name = 'Cloth Config'
+		url = 'https://maven.shedaniel.me/'
+	}
+	maven {
+		name = 'Mod Menu'
+		url = 'https://maven.terraformersmc.com/releases/'
+	}
 }
 
 processResources {
@@ -51,32 +67,116 @@ tasks.withType(JavaCompile) {
 // if it is present.
 // If you remove this task, sources will not be generated.
 task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
+	archiveClassifier.set("sources")
 	from sourceSets.main.allSource
 }
 
-jar {
-	from "LICENSE.md"
+task javadocJar(type: Jar, dependsOn: classes) {
+	archiveClassifier.set('javadoc')
+	from javadoc
 }
 
-curseforge {
-	apiKey = project.hasProperty("curseForgeApiKey") ? project.curseForgeApiKey : "empty"
-	project {
-		id = '408199'
-		changelog = file('changelog.txt')
-		releaseType = 'release'
-		addGameVersion '1.16.3'
-		addGameVersion '1.16.2'
-		addGameVersion '1.16.1'
-		addGameVersion '1.16'
-		addGameVersion 'Java 8'
-		addGameVersion 'Fabric'
-		mainArtifact(new File(new File(buildDir, "libs"), "$archivesBaseName-${version}.jar")) {
-			displayName = "$archivesBaseName-$version"
+artifacts {
+	archives jar, javadocJar, sourcesJar
+}
+
+signing {
+	sign configurations.archives
+}
+
+signArchives.dependsOn(remapSourcesJar)
+
+jar {
+	from 'LICENSE'
+}
+
+if (hasProperty('curseForgeApiKey')) {
+	curseforge {
+		apiKey = curseForgeApiKey
+		project {
+			id = '408199'
+			changelog = file('changelog.txt')
+			releaseType = project.release_type
+			addGameVersion project.minecraft_version
+			addGameVersion '1.16.4'
+			addGameVersion '1.16.3'
+			addGameVersion '1.16.2'
+			addGameVersion '1.16.1'
+			addGameVersion '1.16'
+			addGameVersion 'Java 8'
+			addGameVersion 'Fabric'
+			mainArtifact(new File(new File(buildDir, "libs"), "$archivesBaseName-${version}.jar")) {
+				displayName = "$archivesBaseName-$version"
+			}
+		}
+		options {
+			javaIntegration = false
+			forgeGradleIntegration = false
 		}
 	}
-	options {
-        javaIntegration = false
-        forgeGradleIntegration = false
-    }
 }
+
+import com.modrinth.minotaur.TaskModrinthUpload
+if (hasProperty('modrinthApiKey')) {
+	task publishModrinth(type: TaskModrinthUpload) {
+		token = modrinthApiKey
+		projectId = '00000000'
+		versionNumber = version
+		versionName = project.mod_version
+		uploadFile = new File(new File(buildDir, "libs"), "$archivesBaseName-${version}.jar")
+		changelog = file('changelog.txt').getText()
+		releaseType = project.release_type
+		addGameVersion(project.minecraft_version as String)
+		addGameVersion('1.16.4')
+		addGameVersion('1.16.3')
+		addGameVersion('1.16.2')
+		addGameVersion('1.16.1')
+		addGameVersion('1.16')
+		addLoader('fabric')
+	}
+}
+
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			pom.project {
+				name 'Textbook'
+				packaging 'jar'
+				description 'A client-side Minecraft mod that allows importing and exporting book text.'
+				url 'https://www.curseforge.com/minecraft/mc-mods/textbook'
+
+				scm {
+					connection "scm:svn:https://github.com/The-Fireplace-Minecraft-Mods/${project.github_slug}.git"
+					developerConnection "scm:svn:https://github.com/The-Fireplace-Minecraft-Mods/${project.github_slug}.git"
+					url "https://github.com/The-Fireplace-Minecraft-Mods/${project.github_slug}"
+				}
+
+				licenses {
+					license {
+						name 'Mozilla Public License 2.0'
+						url 'https://www.mozilla.org/en-US/MPL/2.0/'
+					}
+				}
+
+				developers {
+					developer {
+						id 'the_fireplace'
+						name 'The_Fireplace'
+						email 'the.f1repl4ce@gmail.com'
+					}
+				}
+			}
+		}
+	}
+}
+

@@ -26,8 +26,9 @@ public abstract class BookScreenMixin extends Screen {
 	private void init(CallbackInfo info) {
 		this.addButton(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, new TranslatableText("gui.textbook.export"), (buttonWidget) -> {
 			File exportFile = TextbookLogic.fileSaveSelectionDialog();
-			if(exportFile != null)
+			if (exportFile != null) {
 				TextbookLogic.exportContents(exportFile, contents);
+			}
 		}));
 	}
 }
