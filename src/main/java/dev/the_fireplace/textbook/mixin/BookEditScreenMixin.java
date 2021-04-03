@@ -38,6 +38,11 @@ public abstract class BookEditScreenMixin extends Screen {
 	@Shadow protected abstract void updateButtons();
 
 	@Shadow private int currentPage;
+
+	@Shadow private int cursorIndex;
+
+	@Shadow private int highlightTo;
+
 	private ButtonWidget importButton;
 	private ButtonWidget importClipboardButton;
 	private ButtonWidget volumeConfirmButton;
@@ -132,9 +137,8 @@ public abstract class BookEditScreenMixin extends Screen {
 		this.currentPage = 0;
 		this.pages = pages;
 		this.removeEmptyPages();
-		//this.currentPageSelectionManager.moveCaretToEnd();
+		this.cursorIndex = this.highlightTo = pages.get(currentPage).length() - 1;
 		this.dirty = true;
-		//this.invalidatePageContent();
 		updateButtons();
 	}
 }
