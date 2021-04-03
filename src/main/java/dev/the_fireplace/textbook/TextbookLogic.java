@@ -1,12 +1,11 @@
 package dev.the_fireplace.textbook;
 
 import com.google.common.collect.Lists;
+import dev.the_fireplace.lib.api.client.io.FileDialogFactory;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
-import net.minecraft.text.TranslatableText;
-import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 import javax.annotation.Nullable;
 import java.io.*;
@@ -20,20 +19,22 @@ public class TextbookLogic {
 
     @Nullable
     public static File fileOpenSelectionDialog() {
-        String file = TinyFileDialogs.tinyfd_openFileDialog(new TranslatableText("gui.textbook.import.dialog_title").getString(), null, null, new TranslatableText("gui.textbook.import.text_files").getString(), false);
-        if (file == null) {
-            return null;
-        }
-        return new File(file);
+        return FileDialogFactory.getInstance().showOpenFileDialog(
+            "gui.textbook.import.dialog_title",
+            true,
+            null,
+            "Text files"
+        );
     }
 
     @Nullable
     public static File fileSaveSelectionDialog() {
-        String file = TinyFileDialogs.tinyfd_saveFileDialog(new TranslatableText("gui.textbook.export.dialog_title").getString(), null, null, null);
-        if (file == null) {
-            return null;
-        }
-        return new File(file);
+        return FileDialogFactory.getInstance().showSaveFileDialog(
+            "gui.textbook.export.dialog_title",
+            true,
+            null,
+            "Text files"
+        );
     }
 
     public static void exportContents(File file, BookScreen.Contents contents) {
@@ -56,7 +57,7 @@ public class TextbookLogic {
             while ((st = reader.readLine()) != null) {
                 lines.add(st);
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             Textbook.getLogger().error("Unable to import from file!", e);
             return Collections.emptyList();
         }
@@ -66,14 +67,14 @@ public class TextbookLogic {
     public static List<String> toPages(List<String> lines) {
         List<String> pages = Lists.newArrayList();
         StringBuilder page = new StringBuilder();
-        for(String line: lines) {
+        for (String line: lines) {
             if (fitsOnPage(page+line)) {
                 //noinspection HardcodedLineSeparator
                 page.append(line).append("\n");
             } else if (!fitsOnPage(line)) {
                 String[] parts = line.split(" ");
                 StringBuilder addPart = new StringBuilder();
-                for(String part: parts) {
+                for (String part: parts) {
                     if (fitsOnPage(page + addPart.toString() + part + " ")) {
                         addPart.append(part).append(" ");
                     } else {
