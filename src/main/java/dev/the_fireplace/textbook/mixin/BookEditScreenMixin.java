@@ -56,14 +56,14 @@ public abstract class BookEditScreenMixin extends Screen {
 
 	@Inject(at = @At(value="TAIL"), method = "init")
 	private void init(CallbackInfo info) {
-		importButton = this.addButton(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, new TranslatableText("gui.textbook.import"), this::importFileText));
-		importClipboardButton = this.addButton(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.import_clip"), this::importClipboardText));
-		volumeConfirmButton = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)), this::confirmVolumeSelection));
-		upArrow = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 2, 20, 20, Text.of("^"), (buttonWidget) -> {
+		importButton = this.addDrawableChild(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, new TranslatableText("gui.textbook.import"), this::importFileText));
+		importClipboardButton = this.addDrawableChild(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.import_clip"), this::importClipboardText));
+		volumeConfirmButton = this.addDrawableChild(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)), this::confirmVolumeSelection));
+		upArrow = this.addDrawableChild(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 2, 20, 20, Text.of("^"), (buttonWidget) -> {
 			selectedVolume++;
 			updateButtons();
 		}));
-		downArrow = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 40 + 2, 20, 20, Text.of("v"), (buttonWidget) -> {
+		downArrow = this.addDrawableChild(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 40 + 2, 20, 20, Text.of("v"), (buttonWidget) -> {
 			selectedVolume--;
 			updateButtons();
 		}));
@@ -137,7 +137,7 @@ public abstract class BookEditScreenMixin extends Screen {
 		this.currentPage = 0;
 		this.pages = pages;
 		this.removeEmptyPages();
-		this.currentPageSelectionManager.moveCaretToEnd();
+		this.currentPageSelectionManager.putCursorAtEnd();
 		this.dirty = true;
 		this.invalidatePageContent();
 		updateButtons();

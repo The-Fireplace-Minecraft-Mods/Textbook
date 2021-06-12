@@ -121,6 +121,6 @@ public class TextbookLogic {
     }
 
     public static boolean fitsOnPage(String string) {
-        return string.length() < 1024 && MinecraftClient.getInstance().textRenderer.getStringBoundedHeight(string, 114) <= 128;
+        return string.length() < 1024 && MinecraftClient.getInstance().textRenderer.getWrappedLinesHeight(string, 114) <= 128;
     }
 }
