@@ -1,25 +1,34 @@
 package dev.the_fireplace.textbook;
 
 import com.google.common.collect.Lists;
-import dev.the_fireplace.lib.api.client.io.FileDialogFactory;
+import dev.the_fireplace.lib.api.client.injectables.FileDialogFactory;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
 @Environment(EnvType.CLIENT)
-public class TextbookLogic {
+@Singleton
+public final class TextbookLogic {
     private static final Pattern NEWLINE_REGEX = Pattern.compile("\\R");
+    private final FileDialogFactory dialogFactory;
+
+    @Inject
+    public TextbookLogic(FileDialogFactory dialogFactory) {
+        this.dialogFactory = dialogFactory;
+    }
 
     @Nullable
-    public static File fileOpenSelectionDialog() {
-        return FileDialogFactory.getInstance().showOpenFileDialog(
+    public File fileOpenSelectionDialog() {
+        return dialogFactory.showOpenFileDialog(
             "gui.textbook.import.dialog_title",
             true,
             null,
@@ -28,8 +37,8 @@ public class TextbookLogic {
     }
 
     @Nullable
-    public static File fileSaveSelectionDialog() {
-        return FileDialogFactory.getInstance().showSaveFileDialog(
+    public File fileSaveSelectionDialog() {
+        return dialogFactory.showSaveFileDialog(
             "gui.textbook.export.dialog_title",
             true,
             null,
@@ -37,7 +46,7 @@ public class TextbookLogic {
         );
     }
 
-    public static void exportContents(File file, BookScreen.Contents contents) {
+    public void exportContents(File file, BookScreen.Contents contents) {
         StringBuilder output = new StringBuilder();
         for (int pageIndex = 0; pageIndex < contents.getPageCount(); pageIndex++) {
             //noinspection HardcodedLineSeparator
@@ -50,7 +59,7 @@ public class TextbookLogic {
         }
     }
 
-    public static List<String> importContents(File file) {
+    public List<String> importContents(File file) {
         List<String> lines = Lists.newArrayList();
         try (BufferedReader reader = new BufferedReader(new FileReader(file), 5000)) {
             String st;
@@ -64,7 +73,7 @@ public class TextbookLogic {
         return lines;
     }
 
-    public static List<String> toPages(List<String> lines) {
+    public List<String> toPages(List<String> lines) {
         List<String> pages = Lists.newArrayList();
         StringBuilder page = new StringBuilder();
         for (String line: lines) {
@@ -120,7 +129,7 @@ public class TextbookLogic {
         return pages;
     }
 
-    public static boolean fitsOnPage(String string) {
+    public boolean fitsOnPage(String string) {
         return string.length() < 1024 && MinecraftClient.getInstance().textRenderer.getStringBoundedHeight(string, 114) <= 128;
     }
 }

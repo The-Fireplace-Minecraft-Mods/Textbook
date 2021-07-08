@@ -3,7 +3,6 @@ package dev.the_fireplace.textbook.mixin;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import dev.the_fireplace.textbook.Textbook;
-import dev.the_fireplace.textbook.TextbookLogic;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.BookEditScreen;
@@ -114,9 +113,9 @@ public abstract class BookEditScreenMixin extends Screen {
 	}
 
 	private void importFileText(ButtonWidget buttonWidget) {
-		File importFile = TextbookLogic.fileOpenSelectionDialog();
+		File importFile = Textbook.getLogic().fileOpenSelectionDialog();
 		if (importFile != null) {
-			importText(TextbookLogic.importContents(importFile));
+			importText(Textbook.getLogic().importContents(importFile));
 			//noinspection UnstableApiUsage
 			this.title = Files.getNameWithoutExtension(importFile.getName());
 			if (title.length() > 16) {
@@ -130,7 +129,7 @@ public abstract class BookEditScreenMixin extends Screen {
 	}
 
 	private void importText(List<String> lines) {
-		setPages(TextbookLogic.toPages(lines));
+		setPages(Textbook.getLogic().toPages(lines));
 	}
 
 	private void setPages(List<String> pages) {
