@@ -24,7 +24,7 @@ public abstract class BookScreenMixin extends Screen {
 
 	@Inject(at = @At(value="TAIL"), method = "init")
 	private void init(CallbackInfo info) {
-		CheckboxWidget preserveWhitespaceCheckbox = new CheckboxWidget(this.width / 2 + 2, 196 + 40 + 4, 98, 20, new TranslatableText("gui.textbook.export.preserve_whitespace"), true);
+		CheckboxWidget preserveWhitespaceCheckbox = new CheckboxWidget(this.width / 2 + 2, 196 + 40 + 4, 98, 20, Textbook.getTranslator().getTranslatedString("gui.textbook.export.preserve_whitespace"), true);
 		this.addButton(preserveWhitespaceCheckbox);
 		this.addButton(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, Textbook.getTranslator().getTranslatedString("gui.textbook.export"), (buttonWidget) -> {
 			File exportFile = Textbook.getLogic().fileSaveSelectionDialog();

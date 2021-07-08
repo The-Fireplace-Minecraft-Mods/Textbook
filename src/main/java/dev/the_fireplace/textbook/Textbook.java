@@ -1,8 +1,8 @@
 package dev.the_fireplace.textbook;
 
 import dev.the_fireplace.annotateddi.api.DIContainer;
-import dev.the_fireplace.lib.api.chat.Translator;
-import dev.the_fireplace.lib.api.chat.TranslatorManager;
+import dev.the_fireplace.lib.api.chat.injectables.TranslatorFactory;
+import dev.the_fireplace.lib.api.chat.interfaces.Translator;
 import net.fabricmc.api.ClientModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,9 +15,13 @@ public final class Textbook implements ClientModInitializer {
 	public static Logger getLogger() {
 		return LOGGER;
 	}
-	private static final Translator TRANSLATOR = TranslatorManager.getInstance().getTranslator(MODID);
+	private static Translator translator = null;
 	public static Translator getTranslator() {
-		return TRANSLATOR;
+		if (translator == null) {
+			translator = DIContainer.get().getInstance(TranslatorFactory.class).getTranslator(MODID);
+		}
+
+		return translator;
 	}
 
 	public static TextbookLogic getLogic() {
