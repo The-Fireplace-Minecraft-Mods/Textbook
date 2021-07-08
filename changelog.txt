@@ -1,4 +1,5 @@
 Additions:
+Added checkbox to preserve whitespace when exporting a book
 
 Changes:
 Updated to use Fireplace Lib 4.0.0
