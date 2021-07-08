@@ -136,7 +136,7 @@ public abstract class BookEditScreenMixin extends Screen {
 		this.currentPage = 0;
 		this.pages = pages;
 		this.removeEmptyPages();
-		this.currentPageSelectionManager.moveCaretToEnd();
+		this.currentPageSelectionManager.putCursorAtEnd();
 		this.dirty = true;
 		this.invalidatePageContent();
 		updateButtons();
