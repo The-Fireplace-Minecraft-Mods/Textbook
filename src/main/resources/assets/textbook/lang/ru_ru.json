@@ -1,0 +1,12 @@
+{
+  "gui.textbook.import": "Импорт из файла",
+  "gui.textbook.import_clip": "Импорт из буфера обмена",
+  "gui.textbook.export": "Экспорт в файл",
+  "gui.textbook.import.dialog_title": "Импорт из текстового файла",
+  "gui.textbook.import.text_files": "текстовые файлы",
+  "gui.textbook.export.dialog_title": "Экспорт в текстовый файл",
+  "gui.textbook.volume_confirm": "Том %s из %s",
+  "gui.textbook.volume_up": "Повысить",
+  "gui.textbook.volume_down": "Понизить",
+  "gui.textbook.export.preserve_whitespace": "Сохранить пробелы"
+}
