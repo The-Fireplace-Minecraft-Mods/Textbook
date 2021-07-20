@@ -1,7 +1,6 @@
 Additions:
-Added checkbox to preserve whitespace when exporting a book
+Added Russian language support (kyrtion)
 
 Changes:
-Updated to use Fireplace Lib 5.0.0
 
 Fixes/Internal Changes:
