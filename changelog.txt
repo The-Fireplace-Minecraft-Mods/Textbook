@@ -1,6 +1,6 @@
 Additions:
-Added Russian language support (kyrtion)
 
 Changes:
+Updated to support Fireplace Lib 6
 
 Fixes/Internal Changes:
