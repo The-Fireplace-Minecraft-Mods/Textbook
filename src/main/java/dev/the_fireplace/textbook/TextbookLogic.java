@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Environment(EnvType.CLIENT)
-@Singleton
 public final class TextbookLogic {
     private static final Pattern NEWLINE_REGEX = Pattern.compile("\\R");
     private final FileDialogFactory dialogFactory;
