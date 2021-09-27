@@ -9,14 +9,12 @@ import net.minecraft.client.gui.screen.ingame.BookScreen;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.io.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
 @Environment(EnvType.CLIENT)
-@Singleton
 public final class TextbookLogic {
     private static final Pattern NEWLINE_REGEX = Pattern.compile("\\R");
     private final FileDialogFactory dialogFactory;
