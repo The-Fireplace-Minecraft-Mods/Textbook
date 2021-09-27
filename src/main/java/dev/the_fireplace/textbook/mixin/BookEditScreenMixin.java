@@ -2,8 +2,8 @@ package dev.the_fireplace.textbook.mixin;
 
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
+import dev.the_fireplace.annotateddi.api.DIContainer;
 import dev.the_fireplace.textbook.Textbook;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.BookEditScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -113,9 +113,10 @@ public abstract class BookEditScreenMixin extends Screen {
 	}
 
 	private void importFileText(ButtonWidget buttonWidget) {
-		File importFile = Textbook.getLogic().fileOpenSelectionDialog();
+		TextbookLogic textbookLogic = DIContainer.get().getInstance(TextbookLogic.class);
+		File importFile = textbookLogic.fileOpenSelectionDialog();
 		if (importFile != null) {
-			importText(Textbook.getLogic().importContents(importFile));
+			importText(textbookLogic.importContents(importFile));
 			//noinspection UnstableApiUsage
 			this.title = Files.getNameWithoutExtension(importFile.getName());
 			if (title.length() > 16) {
@@ -129,7 +130,8 @@ public abstract class BookEditScreenMixin extends Screen {
 	}
 
 	private void importText(List<String> lines) {
-		setPages(Textbook.getLogic().toPages(lines));
+		TextbookLogic textbookLogic = DIContainer.get().getInstance(TextbookLogic.class);
+		setPages(textbookLogic.toPages(lines));
 	}
 
 	private void setPages(List<String> pages) {

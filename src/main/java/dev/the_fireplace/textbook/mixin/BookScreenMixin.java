@@ -1,6 +1,7 @@
 package dev.the_fireplace.textbook.mixin;
 
-import dev.the_fireplace.textbook.Textbook;
+import dev.the_fireplace.annotateddi.api.DIContainer;
+import dev.the_fireplace.textbook.TextbookLogic;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -27,12 +28,13 @@ public abstract class BookScreenMixin extends Screen {
 		CheckboxWidget preserveWhitespaceCheckbox = new CheckboxWidget(this.width / 2 + 2, 196 + 40 + 4, 98, 20, Textbook.getTranslator().getTranslatedString("gui.textbook.export.preserve_whitespace"), true);
 		this.addButton(preserveWhitespaceCheckbox);
 		this.addButton(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, Textbook.getTranslator().getTranslatedString("gui.textbook.export"), (buttonWidget) -> {
-			File exportFile = Textbook.getLogic().fileSaveSelectionDialog();
+			TextbookLogic textbookLogic = DIContainer.get().getInstance(TextbookLogic.class);
+			File exportFile = textbookLogic.fileSaveSelectionDialog();
 			if (exportFile != null) {
 				if (preserveWhitespaceCheckbox.isChecked()) {
-					Textbook.getLogic().exportContentsPreservingWhitespace(exportFile, contents);
+					textbookLogic.exportContentsPreservingWhitespace(exportFile, contents);
 				} else {
-					Textbook.getLogic().exportContents(exportFile, contents);
+					textbookLogic.exportContents(exportFile, contents);
 				}
 			}
 		}));
