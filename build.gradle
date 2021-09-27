@@ -53,6 +53,8 @@ java {
 	withJavadocJar()
 }
 
+javadoc.options.addStringOption('Xdoclint:none', '-quiet')
+
 jar {
 	from('LICENSE') {
 		rename { "${it}_${project.archivesBaseName}"}
