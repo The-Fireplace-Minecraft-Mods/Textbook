@@ -1,6 +1,7 @@
 package dev.the_fireplace.textbook.mixin;
 
 import dev.the_fireplace.annotateddi.api.DIContainer;
+import dev.the_fireplace.textbook.Textbook;
 import dev.the_fireplace.textbook.TextbookLogic;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.BookScreen;

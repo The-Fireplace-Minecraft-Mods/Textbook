@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import dev.the_fireplace.annotateddi.api.DIContainer;
 import dev.the_fireplace.textbook.Textbook;
+import dev.the_fireplace.textbook.TextbookLogic;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.BookEditScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
