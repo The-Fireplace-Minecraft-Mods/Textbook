@@ -26,10 +26,16 @@
   "mixins": [
     "textbook.mixins.json"
   ],
-
   "depends": {
     "fabricloader": ">=0.7.4",
     "minecraft": ">=1.17",
     "fireplacelib": ">=6.0.2 <7"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/QXQYPj5"
+      }
+    }
   }
 }
