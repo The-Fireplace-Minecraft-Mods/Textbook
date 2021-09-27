@@ -24,7 +24,7 @@ public abstract class BookScreenMixin extends Screen {
 
 	@Shadow private BookScreen.Contents contents;
 
-	@Inject(at = @At(value="TAIL"), method = "init")
+	@Inject(at = @At("TAIL"), method = "init")
 	private void init(CallbackInfo info) {
 		CheckboxWidget preserveWhitespaceCheckbox = new CheckboxWidget(this.width / 2 + 2, 196 + 40 + 4, 98, 20, new TranslatableText("gui.textbook.export.preserve_whitespace"), true);
 		this.addButton(preserveWhitespaceCheckbox);
