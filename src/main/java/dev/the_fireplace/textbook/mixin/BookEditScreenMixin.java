@@ -54,7 +54,7 @@ public abstract class BookEditScreenMixin extends Screen {
 		super(title);
 	}
 
-	@Inject(at = @At(value="TAIL"), method = "init")
+	@Inject(at = @At("TAIL"), method = "init")
 	private void init(CallbackInfo info) {
 		importButton = this.addButton(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, Textbook.getTranslator().getTranslatedString("gui.textbook.import"), this::importFileText));
 		importClipboardButton = this.addButton(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, Textbook.getTranslator().getTranslatedString("gui.textbook.import_clip"), this::importClipboardText));
