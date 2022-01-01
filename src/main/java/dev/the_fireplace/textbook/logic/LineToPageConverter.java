@@ -92,7 +92,7 @@ public final class LineToPageConverter
             }
             splitLongWordAcrossPages(word);
         }
-        if (!currentPage.isEmpty() || !linePartForCurrentPage.toString().isEmpty()) {
+        if (!currentPage.toString().isEmpty() || !linePartForCurrentPage.toString().isEmpty()) {
             addLineToPage(linePartForCurrentPage.toString());
         }
     }

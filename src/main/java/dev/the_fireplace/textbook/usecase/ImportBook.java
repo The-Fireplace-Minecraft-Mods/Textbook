@@ -8,6 +8,7 @@ import net.minecraft.client.MinecraftClient;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -27,7 +28,7 @@ public class ImportBook
     public Response importBookFromFile() {
         File importFile = textbookFileDialogs.importTextbookFileDialog();
         if (importFile == null) {
-            return new Response(false, "", List.of());
+            return new Response(false, "", new ArrayList<>());
         }
 
         List<String> importedLines = fileImporter.importContents(importFile);
@@ -48,7 +49,28 @@ public class ImportBook
         return new Response(true, "", importedPages);
     }
 
-    public record Response(boolean success, String title, List<String> pages)
+    public static class Response
     {
+        private final boolean success;
+        private final String title;
+        private final List<String> pages;
+
+        public Response(boolean success, String title, List<String> pages) {
+            this.success = success;
+            this.title = title;
+            this.pages = pages;
+        }
+
+        public boolean success() {
+            return success;
+        }
+
+        public String title() {
+            return title;
+        }
+
+        public List<String> pages() {
+            return pages;
+        }
     }
 }

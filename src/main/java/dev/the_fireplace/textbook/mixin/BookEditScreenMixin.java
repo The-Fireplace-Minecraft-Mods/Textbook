@@ -125,7 +125,7 @@ public abstract class BookEditScreenMixin extends Screen {
 		if (!response.success()) {
 			return;
 		}
-		if (!response.title().isBlank()) {
+		if (!response.title().isEmpty()) {
 			this.title = response.title();
 		}
 		this.setPages(response.pages());
