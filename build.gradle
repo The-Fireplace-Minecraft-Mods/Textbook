@@ -31,6 +31,7 @@ dependencies {
 
 	modCompileOnly "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}:api"
 	modRuntimeOnly "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}"
+	annotationProcessor "dev.the-fireplace:Annotated-DI:${project.annotateddi_version}:processor"
 
 	compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 }

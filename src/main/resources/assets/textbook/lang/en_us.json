@@ -8,5 +8,10 @@
   "gui.textbook.volume_confirm": "Select Volume %s of %s.",
   "gui.textbook.volume_up": "Volume Number Up",
   "gui.textbook.volume_down": "Volume Number Down",
-  "gui.textbook.export.preserve_whitespace": "Preserve Whitespace"
+  "gui.textbook.export.preserve_whitespace": "Preserve Whitespace",
+  "text.config.textbook.title": "Textbook Config",
+  "text.config.textbook.option.pageByteLimit": "Page Byte Limit",
+  "text.config.textbook.option.pageByteLimit.desc[0]": "Limit the number of bytes that a page can hold.",
+  "text.config.textbook.option.pageByteLimit.desc[1]": "Useful on servers that enforce limits using mods/plugins such as Paper.",
+  "text.config.textbook.option.pageByteLimit.desc[2]": "Set to 0 for no byte limit."
 }
