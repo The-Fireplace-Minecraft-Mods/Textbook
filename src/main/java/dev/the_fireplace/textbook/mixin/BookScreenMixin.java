@@ -1,7 +1,7 @@
 package dev.the_fireplace.textbook.mixin;
 
 import dev.the_fireplace.annotateddi.api.DIContainer;
-import dev.the_fireplace.textbook.TextbookLogic;
+import dev.the_fireplace.textbook.usecase.ExportBook;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -13,8 +13,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.io.File;
 
 @Mixin(BookScreen.class)
 public abstract class BookScreenMixin extends Screen {
@@ -29,15 +27,8 @@ public abstract class BookScreenMixin extends Screen {
 		CheckboxWidget preserveWhitespaceCheckbox = new CheckboxWidget(this.width / 2 + 2, 196 + 40 + 4, 98, 20, new TranslatableText("gui.textbook.export.preserve_whitespace"), true);
 		this.addDrawableChild(preserveWhitespaceCheckbox);
 		this.addDrawableChild(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, new TranslatableText("gui.textbook.export"), (buttonWidget) -> {
-			TextbookLogic textbookLogic = DIContainer.get().getInstance(TextbookLogic.class);
-			File exportFile = textbookLogic.fileSaveSelectionDialog();
-			if (exportFile != null) {
-				if (preserveWhitespaceCheckbox.isChecked()) {
-					textbookLogic.exportContentsPreservingWhitespace(exportFile, contents);
-				} else {
-					textbookLogic.exportContents(exportFile, contents);
-				}
-			}
+			ExportBook exportBook = DIContainer.get().getInstance(ExportBook.class);
+			exportBook.export(contents, preserveWhitespaceCheckbox.isChecked());
 		}));
 	}
 }
