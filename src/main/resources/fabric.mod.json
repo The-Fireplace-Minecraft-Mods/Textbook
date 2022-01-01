@@ -19,8 +19,8 @@
 
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "dev.the_fireplace.textbook.Textbook"
+    "modmenu": [
+      "dev.the_fireplace.textbook.entrypoints.ModMenu"
     ]
   },
   "mixins": [
