@@ -2,7 +2,7 @@ package dev.the_fireplace.textbook.logic;
 
 import com.google.common.collect.Lists;
 import dev.the_fireplace.annotateddi.api.DIContainer;
-import dev.the_fireplace.textbook.Textbook;
+import dev.the_fireplace.textbook.TextbookConstants;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -24,7 +24,7 @@ public class FileImporter
                 lines.add(st);
             }
         } catch (IOException e) {
-            Textbook.getLogger().error("Unable to import from file!", e);
+            TextbookConstants.getLogger().error("Unable to import from file!", e);
             return Collections.emptyList();
         }
         return lines;

@@ -1,6 +1,6 @@
 package dev.the_fireplace.textbook.logic;
 
-import dev.the_fireplace.textbook.Textbook;
+import dev.the_fireplace.textbook.TextbookConstants;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
@@ -52,7 +52,7 @@ public class FileExporter
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(str);
         } catch (IOException e) {
-            Textbook.getLogger().error("Unable to export to file!", e);
+            TextbookConstants.getLogger().error("Unable to export to file!", e);
         }
     }
 }

@@ -2,7 +2,7 @@ package dev.the_fireplace.textbook.mixin;
 
 import com.google.common.collect.Lists;
 import dev.the_fireplace.annotateddi.api.DIContainer;
-import dev.the_fireplace.textbook.Textbook;
+import dev.the_fireplace.textbook.TextbookConstants;
 import dev.the_fireplace.textbook.usecase.ImportBook;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.BookEditScreen;
@@ -98,7 +98,7 @@ public abstract class BookEditScreenMixin extends Screen {
 			return;
 		}
 		if (digits > 15) {
-			Textbook.getLogger().info("Do you really need to import that much text? That's a {} digit number. How will you even label the volumes accurately?", digits);
+			TextbookConstants.getLogger().info("Do you really need to import that much text? That's a {} digit number. How will you even label the volumes accurately?", digits);
 			digits = 15;
 		}
 		if (title.length() > 15 - digits) {
