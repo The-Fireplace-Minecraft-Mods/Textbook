@@ -19,7 +19,7 @@ public final class MinecraftBookConstraints
     }
 
     public boolean fitsOnPage(String string) {
-        boolean meetsMinecraftPageConstraints = string.length() < 1024 && MinecraftClient.getInstance().textRenderer.getWrappedLinesHeight(string, 114) <= 128;
+        boolean meetsMinecraftPageConstraints = string.length() < 1024 && MinecraftClient.getInstance().textRenderer.getStringBoundedHeight(string, 114) <= 128;
         boolean meetsCustomConstraints = configValues.getPageByteLimit() == 0 || string.getBytes(StandardCharsets.UTF_8).length <= configValues.getPageByteLimit();
         return meetsMinecraftPageConstraints && meetsCustomConstraints;
     }
