@@ -53,9 +53,9 @@ public abstract class BookEditScreenMixin extends Screen {
 
 	@Inject(at = @At("TAIL"), method = "init")
 	private void init(CallbackInfo info) {
-		importButton = this.addButton(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, Textbook.getTranslator().getTranslatedString("gui.textbook.import"), this::importFileText));
-		importClipboardButton = this.addButton(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, Textbook.getTranslator().getTranslatedString("gui.textbook.import_clip"), this::importClipboardText));
-		volumeConfirmButton = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, Textbook.getTranslator().getTranslatedString("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)), this::confirmVolumeSelection));
+		importButton = this.addButton(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, TextbookConstants.getTranslator().getTranslatedString("gui.textbook.import"), this::importFileText));
+		importClipboardButton = this.addButton(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, TextbookConstants.getTranslator().getTranslatedString("gui.textbook.import_clip"), this::importClipboardText));
+		volumeConfirmButton = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, TextbookConstants.getTranslator().getTranslatedString("gui.textbook.volume_confirm", selectedVolume, (int) Math.ceil(pages.size() / 100d)), this::confirmVolumeSelection));
 		upArrow = this.addButton(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 2, 20, 20, "^", (buttonWidget) -> {
 			selectedVolume++;
 			updateButtons();
@@ -71,7 +71,7 @@ public abstract class BookEditScreenMixin extends Screen {
 	@Inject(at = @At("TAIL"), method = "updateButtons")
 	private void updateButtons(CallbackInfo ci) {
 		if (textbookButtonsInitialized) {
-			volumeConfirmButton.setMessage(Textbook.getTranslator().getTranslatedString("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)));
+			volumeConfirmButton.setMessage(TextbookConstants.getTranslator().getTranslatedString("gui.textbook.volume_confirm", selectedVolume, (int) Math.ceil(pages.size() / 100d)));
 			importButton.visible = importClipboardButton.visible = !this.signing;
 			int totalVolumeCount = (int) Math.ceil(pages.size() / 100d);
 			boolean showVolumeSelector = !this.signing && totalVolumeCount > 1;
