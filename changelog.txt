@@ -1,1 +1,2 @@
-Update required Fabric Loader / Fireplace Lib versions
+Major refactor of code for easier maintenance
+Fix longer-than-page lines not adding newline at the end of the line (Thanks Mumberthrax)

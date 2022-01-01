@@ -1,11 +1,9 @@
 package dev.the_fireplace.textbook.mixin;
 
 import com.google.common.collect.Lists;
-import com.google.common.io.Files;
 import dev.the_fireplace.annotateddi.api.DIContainer;
 import dev.the_fireplace.textbook.Textbook;
-import dev.the_fireplace.textbook.TextbookLogic;
-import net.minecraft.client.MinecraftClient;
+import dev.the_fireplace.textbook.usecase.ImportBook;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.BookEditScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -18,13 +16,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.io.File;
 import java.util.List;
-import java.util.regex.Pattern;
 
 @Mixin(BookEditScreen.class)
 public abstract class BookEditScreenMixin extends Screen {
-	private static final Pattern CARRIAGE_RETURN = Pattern.compile("\\R");
 	@Mutable
 	@Shadow @Final private List<String> pages;
 
@@ -115,25 +110,25 @@ public abstract class BookEditScreenMixin extends Screen {
 	}
 
 	private void importFileText(ButtonWidget buttonWidget) {
-		TextbookLogic textbookLogic = DIContainer.get().getInstance(TextbookLogic.class);
-		File importFile = textbookLogic.fileOpenSelectionDialog();
-		if (importFile != null) {
-			importText(textbookLogic.importContents(importFile));
-			//noinspection UnstableApiUsage
-			this.title = Files.getNameWithoutExtension(importFile.getName());
-			if (title.length() > 16) {
-				this.title = title.substring(0, 16);
-			}
-		}
+		ImportBook importBook = DIContainer.get().getInstance(ImportBook.class);
+		ImportBook.Response importedData = importBook.importBookFromFile();
+		processImportResponse(importedData);
 	}
 
 	private void importClipboardText(ButtonWidget buttonWidget) {
-		importText(Lists.newArrayList(CARRIAGE_RETURN.split(MinecraftClient.getInstance().keyboard.getClipboard())));
+		ImportBook importBook = DIContainer.get().getInstance(ImportBook.class);
+		ImportBook.Response importedData = importBook.importBookFromClipboard();
+		processImportResponse(importedData);
 	}
 
-	private void importText(List<String> lines) {
-		TextbookLogic textbookLogic = DIContainer.get().getInstance(TextbookLogic.class);
-		setPages(textbookLogic.toPages(lines));
+	private void processImportResponse(ImportBook.Response response) {
+		if (!response.success()) {
+			return;
+		}
+		if (!response.title().isBlank()) {
+			this.title = response.title();
+		}
+		this.setPages(response.pages());
 	}
 
 	private void setPages(List<String> pages) {
