@@ -131,7 +131,7 @@ public final class TextbookLogic {
                     }
                 }
                 if (!addPart.toString().isEmpty()) {
-                    page.append(addPart);
+                    page.append(addPart).append("\n");
                 }
             } else {
                 pages.add(page.toString());
