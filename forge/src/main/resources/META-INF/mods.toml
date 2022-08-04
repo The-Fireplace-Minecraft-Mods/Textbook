@@ -1,0 +1,44 @@
+modLoader = "javafml"
+loaderVersion = "[38,)"
+license = "${license_name}"
+issueTrackerURL = "${github_url}/issues"
+showAsResourcePack = false
+
+[[mods]]
+modId = "textbook"
+version = "${version}"
+displayName = "${readable_name}"
+updateJSONURL = "${forge_update_json_url}"
+displayURL = "${forge_curseforge_url}"
+logoFile = "${logo_filename}"
+credits = ""
+authors = "The_Fireplace"
+description = "${mod_description}"
+
+[[dependencies.textbook]]
+modId = "forge"
+mandatory = true
+versionRange = "[38,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.textbook]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.18,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.textbook]]
+modId = "annotateddi"
+mandatory = true
+versionRange = "[4,5)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.textbook]]
+modId = "fireplacelib"
+mandatory = true
+versionRange = "[7,8)"
+ordering = "NONE"
+side = "BOTH"
