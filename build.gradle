@@ -1,155 +1,69 @@
 //file:noinspection GroovyAssignabilityCheck
 plugins {
-	// Dependencies
-	id 'fabric-loom' version '0.10-SNAPSHOT'
-	// Mod Hosting Publish
-	id 'com.matthewprenger.cursegradle' version '1.4.0'
-	id 'com.modrinth.minotaur' version '1.1.0'
-	// Maven Publish
-	id 'maven-publish'
-	id 'signing'
-	id 'io.codearte.nexus-staging' version '0.30.0'
+    id 'java'
+    // Standard Artifact Publish
+    id 'maven-publish'
+    id 'signing'
+    id 'io.codearte.nexus-staging' version '0.30.0'
 }
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 
-archivesBaseName = project.archives_base_name
-version = "${project.mod_version}+${project.minecraft_version}"
-group = project.maven_group
+    group = project.maven_group
+    version = "${project.mod_version}+${project.minecraft_version}"
+    if (project.hasProperty('SNAPSHOT')) {
+        version = "${version}-SNAPSHOT"
+    }
 
-repositories {
-	maven { url = 'https://maven.shedaniel.me/' }
-	maven { url = 'https://maven.terraformersmc.com/releases/' }
-	flatDir { dirs 'lib' }
-}
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = 'UTF-8'
+        it.options.release.set(8)
+    }
 
-dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    javadoc.options.addStringOption('Xdoclint:none', '-quiet')
 
-	modCompileOnly "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}:api"
-	modRuntimeOnly "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}"
-	annotationProcessor "dev.the-fireplace:Annotated-DI:${project.annotateddi_version}:processor"
+    nexusStaging {
+        packageGroup = project.maven_group
+    }
 
-	compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
-}
+    jar {
+        manifest {
+            attributes([
+                    'Specification-Title'     : archives_base_name,
+                    'Specification-Vendor'    : 'The_Fireplace',
+                    'Specification-Version'   : project.jar.archiveVersion,
+                    'Implementation-Title'    : project.name,
+                    'Implementation-Version'  : project.jar.archiveVersion,
+                    'Implementation-Vendor'   : 'The_Fireplace',
+                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    'Timestampe'              : System.currentTimeMillis(),
+                    'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
+                    'Build-On-Minecraft'      : minecraft_version
+            ])
+        }
+        from('LICENSE') {
+            rename { "${it}_${archives_base_name}" }
+        }
+    }
 
-processResources {
-	inputs.property 'version', project.version
+    repositories {
+        mavenCentral()
 
-	filesMatching('fabric.mod.json') {
-		expand 'version': project.version
-	}
-}
+        maven {
+            name = 'Sponge / Mixin'
+            url = 'https://repo.spongepowered.org/repository/maven-public/'
+        }
+    }
 
-tasks.withType(JavaCompile).configureEach {
-	it.options.encoding = 'UTF-8'
-	it.options.release.set(8)
-}
-
-java {
-	withSourcesJar()
-	withJavadocJar()
-}
-
-javadoc.options.addStringOption('Xdoclint:none', '-quiet')
-
-jar {
-	from('LICENSE') {
-		rename { "${it}_${project.archivesBaseName}"}
-	}
-}
-
-if (hasProperty('curseForgeApiKey')) {
-	curseforge {
-		apiKey = curseForgeApiKey
-		project {
-			id = '408199'
-			changelog = file('changelog.txt')
-			releaseType = project.release_type
-			addGameVersion project.minecraft_version
-			addGameVersion '1.15.1'
-			addGameVersion '1.15'
-			addGameVersion 'Java 8'
-			addGameVersion 'Fabric'
-			mainArtifact(new File(new File(buildDir, 'libs'), "$archivesBaseName-${version}.jar")) {
-				displayName = "$archivesBaseName-$version"
-			}
-		}
-		options {
-			javaIntegration = false
-			forgeGradleIntegration = false
-		}
-	}
-}
-
-import com.modrinth.minotaur.TaskModrinthUpload
-if (hasProperty('modrinthApiKey')) {
-	task publishModrinth(type: TaskModrinthUpload) {
-		token = modrinthApiKey
-		projectId = 'bVkN6vx9'
-		versionNumber = version
-		versionName = project.mod_version
-		uploadFile = new File(new File(buildDir, 'libs'), "$archivesBaseName-${version}.jar")
-		changelog = file('changelog.txt').getText()
-		releaseType = project.release_type
-		addGameVersion(project.minecraft_version as String)
-		addGameVersion('1.15.1')
-		addGameVersion('1.15')
-		addLoader('fabric')
-	}
-}
-
-if (hasProperty('nexusUsername')) {
-	publishing {
-		publications {
-			mavenJava(MavenPublication) {
-				from components.java
-				pom {
-					name = 'Textbook'
-					packaging = 'jar'
-					description = 'A client-side Minecraft mod that allows importing and exporting book text.'
-					url = 'https://www.curseforge.com/minecraft/mc-mods/textbook'
-
-					scm {
-						connection = "scm:svn:https://github.com/The-Fireplace-Minecraft-Mods/${project.github_slug}.git"
-						developerConnection = "scm:svn:https://github.com/The-Fireplace-Minecraft-Mods/${project.github_slug}.git"
-						url = "https://github.com/The-Fireplace-Minecraft-Mods/${project.github_slug}"
-					}
-
-					licenses {
-						license {
-							name = 'Mozilla Public License 2.0'
-							url = 'https://www.mozilla.org/en-US/MPL/2.0/'
-						}
-					}
-
-					developers {
-						developer {
-							id = 'the_fireplace'
-							name = 'The_Fireplace'
-							email = 'the.f1repl4ce@gmail.com'
-						}
-					}
-				}
-			}
-		}
-		repositories {
-			maven {
-				def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-				def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
-				url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-				credentials {
-					username = nexusUsername
-					password = nexusPassword
-				}
-			}
-		}
-	}
-
-	signing {
-		sign publishing.publications.mavenJava
-	}
+    // Disables Gradle's custom module metadata from being published to maven. The
+    // metadata includes mapped dependencies which are not reasonably consumable by
+    // other mod developers.
+    tasks.withType(GenerateModuleMetadata) {
+        enabled = false
+    }
 }
