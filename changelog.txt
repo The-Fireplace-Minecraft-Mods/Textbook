@@ -1,3 +1,1 @@
-Major refactor of code for easier maintenance
-Fix longer-than-page lines not adding newline at the end of the line (Thanks Mumberthrax)
-Added a config option to limit page byte count when importing, for compliance with Paper server restrictions.
+Updated the mod for 1.19

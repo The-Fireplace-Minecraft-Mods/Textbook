@@ -2,6 +2,7 @@ package dev.the_fireplace.textbook.usecase;
 
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
+import com.mojang.authlib.yggdrasil.response.Response;
 import dev.the_fireplace.textbook.logic.FileImporter;
 import dev.the_fireplace.textbook.logic.TextbookFileDialogs;
 import net.minecraft.client.MinecraftClient;
@@ -25,11 +26,23 @@ public class ImportBook
     }
 
     public Response importBookFromFile() {
+        File importFile = textbookFileDialogs.importTextbookFileDialog();
+        if (importFile == null) {
+            return new Response(false, "", List.of());
+        }
 
-        return new Response(true,null,null);
+        List<String> importedLines = fileImporter.importContents(importFile);
+        //noinspection UnstableApiUsage
+        String title = Files.getNameWithoutExtension(importFile.getName());
+        if (title.length() > 16) {
+            title = title.substring(0, 16);
+        }
+        List<String> importedPages = fileImporter.toPages(importedLines);
+
+        return new Response(true, title, importedPages);
     }
 
-    public Response importBookFromClipboard() {
+        public Response importBookFromClipboard() {
         List<String> importedLines = Lists.newArrayList(CARRIAGE_RETURN.split(MinecraftClient.getInstance().keyboard.getClipboard()));
         List<String> importedPages = fileImporter.toPages(importedLines);
 

@@ -7,6 +7,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.BookEditScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.SelectionManager;
+import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 import org.spongepowered.asm.mixin.Final;
@@ -52,6 +53,7 @@ public abstract class BookEditScreenMixin extends Screen {
 
 	@Inject(at = @At("TAIL"), method = "init")
 	private void init(CallbackInfo info) {
+		importButton = this.addDrawableChild(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, Text.translatable("gui.textbook.import"), this::importFileText));
 		importClipboardButton = this.addDrawableChild(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, Text.translatable("gui.textbook.import_clip"), this::importClipboardText));
 		volumeConfirmButton = this.addDrawableChild(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, Text.translatable("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)), this::confirmVolumeSelection));
 		upArrow = this.addDrawableChild(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 2, 20, 20, Text.of("^"), (buttonWidget) -> {
@@ -108,6 +110,11 @@ public abstract class BookEditScreenMixin extends Screen {
 	}
 
 
+	private void importFileText(ButtonWidget buttonWidget) {
+		ImportBook importBook = TextbookConstants.getInjector().getInstance(ImportBook.class);
+		ImportBook.Response importedData = importBook.importBookFromFile();
+		processImportResponse(importedData);
+	}
 	private void importClipboardText(ButtonWidget buttonWidget) {
 		ImportBook importBook = TextbookConstants.getInjector().getInstance(ImportBook.class);
 		ImportBook.Response importedData = importBook.importBookFromClipboard();

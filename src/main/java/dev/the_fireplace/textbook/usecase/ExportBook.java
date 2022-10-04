@@ -18,7 +18,16 @@ public class ExportBook
         this.fileExporter = fileExporter1;
     }
 
-    public void export(BookScreen.Contents bookContents, boolean preserveWhitespace) {
 
+    public void export(BookScreen.Contents bookContents, boolean preserveWhitespace) {
+        File exportFile = textbookFileDialogs.exportTextbookFileDialog();
+        if (exportFile == null) {
+            return;
+        }
+        if (preserveWhitespace) {
+            fileExporter.exportContentsPreservingWhitespace(exportFile, bookContents);
+        } else {
+            fileExporter.exportContents(exportFile, bookContents);
+        }
     }
 }
