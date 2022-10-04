@@ -14,24 +14,5 @@ public class TextbookFileDialogs
     public TextbookFileDialogs(FileDialogFactory dialogFactory) {
         this.dialogFactory = dialogFactory;
     }
-
-    @Nullable
-    public File exportTextbookFileDialog() {
-        return dialogFactory.showSaveFileDialog(
-            "gui.textbook.export.dialog_title",
-            true,
-            null,
-            "Text files"
-        );
-    }
-
-    @Nullable
-    public File importTextbookFileDialog() {
-        return dialogFactory.showOpenFileDialog(
-            "gui.textbook.import.dialog_title",
-            true,
-            null,
-            "Text files"
-        );
-    }
+    
 }

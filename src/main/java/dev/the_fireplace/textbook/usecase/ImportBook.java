@@ -25,20 +25,8 @@ public class ImportBook
     }
 
     public Response importBookFromFile() {
-        File importFile = textbookFileDialogs.importTextbookFileDialog();
-        if (importFile == null) {
-            return new Response(false, "", List.of());
-        }
 
-        List<String> importedLines = fileImporter.importContents(importFile);
-        //noinspection UnstableApiUsage
-        String title = Files.getNameWithoutExtension(importFile.getName());
-        if (title.length() > 16) {
-            title = title.substring(0, 16);
-        }
-        List<String> importedPages = fileImporter.toPages(importedLines);
-
-        return new Response(true, title, importedPages);
+        return new Response(true,null,null);
     }
 
     public Response importBookFromClipboard() {

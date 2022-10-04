@@ -1,7 +1,6 @@
 package dev.the_fireplace.textbook.mixin;
 
 import com.google.common.collect.Lists;
-import dev.the_fireplace.annotateddi.api.DIContainer;
 import dev.the_fireplace.textbook.TextbookConstants;
 import dev.the_fireplace.textbook.usecase.ImportBook;
 import net.minecraft.client.gui.screen.Screen;
@@ -9,7 +8,7 @@ import net.minecraft.client.gui.screen.ingame.BookEditScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.SelectionManager;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -53,9 +52,8 @@ public abstract class BookEditScreenMixin extends Screen {
 
 	@Inject(at = @At("TAIL"), method = "init")
 	private void init(CallbackInfo info) {
-		importButton = this.addDrawableChild(new ButtonWidget(this.width / 2 + 2, 196 + 20 + 2, 98, 20, new TranslatableText("gui.textbook.import"), this::importFileText));
-		importClipboardButton = this.addDrawableChild(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.import_clip"), this::importClipboardText));
-		volumeConfirmButton = this.addDrawableChild(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, new TranslatableText("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)), this::confirmVolumeSelection));
+		importClipboardButton = this.addDrawableChild(new ButtonWidget(this.width / 2 - 120, 196 + 20 + 2, 118, 20, Text.translatable("gui.textbook.import_clip"), this::importClipboardText));
+		volumeConfirmButton = this.addDrawableChild(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, Text.translatable("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)), this::confirmVolumeSelection));
 		upArrow = this.addDrawableChild(new ButtonWidget(this.width / 2 + 100 + 2, 196 + 2, 20, 20, Text.of("^"), (buttonWidget) -> {
 			selectedVolume++;
 			updateButtons();
@@ -71,7 +69,7 @@ public abstract class BookEditScreenMixin extends Screen {
 	@Inject(at = @At("TAIL"), method = "updateButtons")
 	private void updateButtons(CallbackInfo ci) {
 		if (textbookButtonsInitialized) {
-			volumeConfirmButton.setMessage(new TranslatableText("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)));
+			volumeConfirmButton.setMessage(Text.translatable("gui.textbook.volume_confirm", selectedVolume, (int)Math.ceil(pages.size() / 100d)));
 			importButton.visible = importClipboardButton.visible = !this.signing;
 			int totalVolumeCount = (int) Math.ceil(pages.size() / 100d);
 			boolean showVolumeSelector = !this.signing && totalVolumeCount > 1;
@@ -109,14 +107,9 @@ public abstract class BookEditScreenMixin extends Screen {
 		}
 	}
 
-	private void importFileText(ButtonWidget buttonWidget) {
-		ImportBook importBook = DIContainer.get().getInstance(ImportBook.class);
-		ImportBook.Response importedData = importBook.importBookFromFile();
-		processImportResponse(importedData);
-	}
 
 	private void importClipboardText(ButtonWidget buttonWidget) {
-		ImportBook importBook = DIContainer.get().getInstance(ImportBook.class);
+		ImportBook importBook = TextbookConstants.getInjector().getInstance(ImportBook.class);
 		ImportBook.Response importedData = importBook.importBookFromClipboard();
 		processImportResponse(importedData);
 	}

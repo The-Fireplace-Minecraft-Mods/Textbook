@@ -6,7 +6,8 @@
   "name": "Textbook",
   "description": "Import books from and export books to text files.",
   "authors": [
-    "The_Fireplace"
+    "The_Fireplace",
+    "DivineEssentia"
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/textbook",
@@ -28,8 +29,8 @@
   ],
   "depends": {
     "fabricloader": ">=0.12.0",
-    "minecraft": ">=1.18",
-    "fireplacelib": ">=6.2 <7"
+    "minecraft": ">=1.19",
+    "fireplacelib": "7.0.2+1.19"
   },
   "custom": {
     "modmenu": {

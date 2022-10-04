@@ -1,7 +1,6 @@
 package dev.the_fireplace.textbook.logic;
 
 import com.google.common.collect.Lists;
-import dev.the_fireplace.annotateddi.api.DIContainer;
 import dev.the_fireplace.textbook.TextbookConstants;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -31,7 +30,7 @@ public class FileImporter
     }
 
     public List<String> toPages(List<String> lines) {
-        return DIContainer.get().getInstance(LineToPageConverter.class)
+        return TextbookConstants.getInjector().getInstance(LineToPageConverter.class)
             .setLines(lines)
             .getPages();
     }

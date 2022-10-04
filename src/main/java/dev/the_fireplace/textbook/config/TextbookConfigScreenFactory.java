@@ -2,10 +2,10 @@ package dev.the_fireplace.textbook.config;
 
 import dev.the_fireplace.lib.api.chat.injectables.TranslatorFactory;
 import dev.the_fireplace.lib.api.chat.interfaces.Translator;
-import dev.the_fireplace.lib.api.client.injectables.ConfigScreenBuilderFactory;
-import dev.the_fireplace.lib.api.client.interfaces.ConfigScreenBuilder;
 import dev.the_fireplace.lib.api.lazyio.injectables.ConfigStateManager;
 import dev.the_fireplace.textbook.TextbookConstants;
+import dev.the_fireplace.textbook.api.ConfigScreenBuilderFactoryNew;
+import dev.the_fireplace.textbook.api.ConfigScreenBuilderNew;
 import dev.the_fireplace.textbook.domain.config.ConfigValues;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -26,9 +26,9 @@ public final class TextbookConfigScreenFactory
     private final ConfigStateManager configStateManager;
     private final TextbookConfig config;
     private final ConfigValues defaultConfigValues;
-    private final ConfigScreenBuilderFactory configScreenBuilderFactory;
+    private final ConfigScreenBuilderFactoryNew configScreenBuilderFactory;
 
-    private ConfigScreenBuilder configScreenBuilder;
+    private ConfigScreenBuilderNew configScreenBuilder;
 
     @Inject
     public TextbookConfigScreenFactory(
@@ -36,7 +36,7 @@ public final class TextbookConfigScreenFactory
         ConfigStateManager configStateManager,
         TextbookConfig config,
         @Named("default") ConfigValues defaultConfigValues,
-        ConfigScreenBuilderFactory configScreenBuilderFactory
+        ConfigScreenBuilderFactoryNew configScreenBuilderFactory
     ) {
         this.translator = translatorFactory.getTranslator(TextbookConstants.MODID);
         this.configStateManager = configStateManager;
