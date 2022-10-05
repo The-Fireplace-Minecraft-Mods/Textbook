@@ -8,7 +8,6 @@ import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -60,9 +59,9 @@ public abstract class BookEditScreenMixin extends Screen {
 
     @Inject(at = @At("TAIL"), method = "init")
     private void init(CallbackInfo info) {
-        importButton = this.addRenderableWidget(new Button(this.width / 2 + 2, 196 + 20 + 2, 98, 20, new TranslatableComponent("gui.textbook.import"), this::importFileText));
-        importClipboardButton = this.addRenderableWidget(new Button(this.width / 2 - 120, 196 + 20 + 2, 118, 20, new TranslatableComponent("gui.textbook.import_clip"), this::importClipboardText));
-        volumeConfirmButton = this.addRenderableWidget(new Button(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, new TranslatableComponent("gui.textbook.volume_confirm", selectedVolume, (int) Math.ceil(pages.size() / 100d)), this::confirmVolumeSelection));
+        importButton = this.addRenderableWidget(new Button(this.width / 2 + 2, 196 + 20 + 2, 98, 20, Component.translatable("gui.textbook.import"), this::importFileText));
+        importClipboardButton = this.addRenderableWidget(new Button(this.width / 2 - 120, 196 + 20 + 2, 118, 20, Component.translatable("gui.textbook.import_clip"), this::importClipboardText));
+        volumeConfirmButton = this.addRenderableWidget(new Button(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, Component.translatable("gui.textbook.volume_confirm", selectedVolume, (int) Math.ceil(pages.size() / 100d)), this::confirmVolumeSelection));
         upArrow = this.addRenderableWidget(new Button(this.width / 2 + 100 + 2, 196 + 2, 20, 20, Component.nullToEmpty("^"), (buttonWidget) -> {
             selectedVolume++;
             updateButtonVisibility();
@@ -78,7 +77,7 @@ public abstract class BookEditScreenMixin extends Screen {
     @Inject(at = @At("TAIL"), method = "updateButtonVisibility")
     private void updateButtonVisibility(CallbackInfo ci) {
         if (textbookButtonsInitialized) {
-            volumeConfirmButton.setMessage(new TranslatableComponent("gui.textbook.volume_confirm", selectedVolume, (int) Math.ceil(pages.size() / 100d)));
+            volumeConfirmButton.setMessage(Component.translatable("gui.textbook.volume_confirm", selectedVolume, (int) Math.ceil(pages.size() / 100d)));
             importButton.visible = importClipboardButton.visible = !this.isSigning;
             int totalVolumeCount = (int) Math.ceil(pages.size() / 100d);
             boolean showVolumeSelector = !this.isSigning && totalVolumeCount > 1;
