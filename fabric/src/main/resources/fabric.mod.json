@@ -35,8 +35,7 @@
             "links": {
                 "modmenu.discord": "${discord_url}",
                 "annotateddi.twitter": "${twitter_url}",
-                "annotateddi.kofi": "${kofi_url}",
-                "annotateddi.patreon": "${patreon_url}"
+                "annotateddi.kofi": "${kofi_url}"
             }
         }
     }
