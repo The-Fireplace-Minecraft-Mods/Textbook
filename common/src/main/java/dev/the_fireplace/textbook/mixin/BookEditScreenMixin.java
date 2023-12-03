@@ -59,17 +59,17 @@ public abstract class BookEditScreenMixin extends Screen {
 
     @Inject(at = @At("TAIL"), method = "init")
     private void init(CallbackInfo info) {
-        importButton = this.addRenderableWidget(new Button(this.width / 2 + 2, 196 + 20 + 2, 98, 20, Component.translatable("gui.textbook.import"), this::importFileText));
-        importClipboardButton = this.addRenderableWidget(new Button(this.width / 2 - 120, 196 + 20 + 2, 118, 20, Component.translatable("gui.textbook.import_clip"), this::importClipboardText));
-        volumeConfirmButton = this.addRenderableWidget(new Button(this.width / 2 + 100 + 2, 196 + 20 + 2, 118, 20, Component.translatable("gui.textbook.volume_confirm", selectedVolume, (int) Math.ceil(pages.size() / 100d)), this::confirmVolumeSelection));
-        upArrow = this.addRenderableWidget(new Button(this.width / 2 + 100 + 2, 196 + 2, 20, 20, Component.nullToEmpty("^"), (buttonWidget) -> {
+        importButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.textbook.import"),this::importFileText).pos(this.width / 2 + 2, 196 + 20 + 2).width(98).build());
+        importClipboardButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.textbook.import_clip"), this::importClipboardText).pos(this.width / 2 - 120, 196 + 20 + 2).width(118).build());
+        volumeConfirmButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.textbook.volume_confirm", selectedVolume, (int) Math.ceil(pages.size() / 100d)), this::confirmVolumeSelection).pos(this.width / 2 + 100 + 2, 196 + 20 + 2).width(118).build());
+        upArrow = this.addRenderableWidget(Button.builder(Component.nullToEmpty("^"), (buttonWidget) -> {
             selectedVolume++;
             updateButtonVisibility();
-        }));
-        downArrow = this.addRenderableWidget(new Button(this.width / 2 + 100 + 2, 196 + 40 + 2, 20, 20, Component.nullToEmpty("v"), (buttonWidget) -> {
+        }).pos(this.width / 2 + 100 + 2, 196 + 2).width(20).build());
+        downArrow = this.addRenderableWidget(Button.builder(Component.nullToEmpty("v"), (buttonWidget) -> {
             selectedVolume--;
             updateButtonVisibility();
-        }));
+        }).pos(this.width / 2 + 100 + 2, 196 + 40 + 2).width(20).build());
         textbookButtonsInitialized = true;
         updateButtonVisibility();
     }
