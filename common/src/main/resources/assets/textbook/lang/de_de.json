@@ -1,0 +1,15 @@
+{
+    "modmenu.descriptionTranslation.textbook": "${mod_description}",
+    "gui.textbook.import": "Lade von Datei",
+    "gui.textbook.import_clip": "Lade von Zwischenablage",
+    "gui.textbook.export": "Exportiere zu Datei",
+    "gui.textbook.import.dialog_title": "Lade von Textdatei",
+    "gui.textbook.import.text_files": "Textdateien",
+    "gui.textbook.export.dialog_title": "Exportiere zu Textdateien",
+    "gui.textbook.export.preserve_whitespace": "Speichere Leerzeichen",
+    "text.config.textbook.title": "Textbook Konfiguration",
+    "text.config.textbook.option.pageByteLimit": "Seiten Bit Limit",
+    "text.config.textbook.option.pageByteLimit.desc[0]": "Limitier die Anzahl von Bits die eine Seite haben kann.",
+    "text.config.textbook.option.pageByteLimit.desc[1]": "Hilfreich auf Servern, welche ein Limit durch mods/plugins vorgeben wie Paper.",
+    "text.config.textbook.option.pageByteLimit.desc[2]": "Setze 0 für kein Limit."
+}

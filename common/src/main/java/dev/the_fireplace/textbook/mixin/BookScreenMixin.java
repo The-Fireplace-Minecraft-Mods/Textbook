@@ -27,9 +27,9 @@ public abstract class BookScreenMixin extends Screen
     private void init(CallbackInfo info) {
         Checkbox preserveWhitespaceCheckbox = new Checkbox(this.width / 2 + 2, 196 + 40 + 4, 98, 20, Component.translatable("gui.textbook.export.preserve_whitespace"), true);
         this.addRenderableWidget(preserveWhitespaceCheckbox);
-        this.addRenderableWidget(new Button(this.width / 2 + 2, 196 + 20 + 2, 98, 20, Component.translatable("gui.textbook.export"), (buttonWidget) -> {
+        this.addRenderableWidget(Button.builder( Component.translatable("gui.textbook.export"), (buttonWidget) -> {
             ExportBook exportBook = TextbookConstants.getInjector().getInstance(ExportBook.class);
             exportBook.export(bookAccess, preserveWhitespaceCheckbox.selected());
-        }));
+        }).pos(this.width / 2 + 2, 196 + 20 + 2).width(98).build());
     }
 }
