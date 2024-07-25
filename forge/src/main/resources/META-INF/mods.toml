@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[41,)"
+loaderVersion = "[49,)"
 license = "${license_name}"
 issueTrackerURL = "${github_url}/issues"
 showAsResourcePack = false
@@ -18,14 +18,14 @@ description = "${mod_description}"
 [[dependencies.textbook]]
 modId = "forge"
 mandatory = true
-versionRange = "[41,)"
+versionRange = "[49,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.textbook]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19,)"
+versionRange = "[1.20.4,1.20.5)"
 ordering = "NONE"
 side = "BOTH"
 
