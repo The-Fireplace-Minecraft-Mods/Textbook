@@ -25,7 +25,7 @@ side = "BOTH"
 [[dependencies.textbook]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20.4,1.20.5)"
+versionRange = "[1.20.3,1.20.5)"
 ordering = "NONE"
 side = "BOTH"
 

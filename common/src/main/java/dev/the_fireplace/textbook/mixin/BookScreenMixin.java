@@ -7,6 +7,7 @@ import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.BookViewScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.client.gui.Font;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,7 +26,7 @@ public abstract class BookScreenMixin extends Screen
 
     @Inject(at = @At("TAIL"), method = "init")
     private void init(CallbackInfo info) {
-        Checkbox preserveWhitespaceCheckbox = new Checkbox(this.width / 2 + 2, 196 + 40 + 4, 98, 20, Component.translatable("gui.textbook.export.preserve_whitespace"), true);
+        Checkbox preserveWhitespaceCheckbox = Checkbox.builder(Component.translatable("gui.textbook.export.preserve_whitespace"), this.font).pos(this.width / 2 + 2, 196 + 40 + 4).build();
         this.addRenderableWidget(preserveWhitespaceCheckbox);
         this.addRenderableWidget(Button.builder( Component.translatable("gui.textbook.export"), (buttonWidget) -> {
             ExportBook exportBook = TextbookConstants.getInjector().getInstance(ExportBook.class);
