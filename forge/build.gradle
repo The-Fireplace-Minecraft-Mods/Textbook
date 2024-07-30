@@ -15,7 +15,7 @@ plugins {
     id 'java-library'
     // Mod Hosting Publish
     id 'com.matthewprenger.cursegradle' version '1.4.0'
-    id 'com.modrinth.minotaur' version '2.2.0'
+    id 'com.modrinth.minotaur' version '2.8.7'
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'

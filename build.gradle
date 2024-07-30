@@ -11,8 +11,8 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
     java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
     group = project.maven_group
