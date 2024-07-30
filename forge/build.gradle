@@ -151,7 +151,7 @@ if (hasProperty('curseForgeApiKey')) {
             changelog = changelogFile
             releaseType = project.release_type
             addGameVersion project.minecraft_version
-            addGameVersion 'Java 17'
+            addGameVersion 'Java 21'
             addGameVersion 'Forge'
             mainArtifact(mainArtifactFile) {
                 displayName = "$archivesBaseName-$version"

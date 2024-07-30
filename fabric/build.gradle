@@ -3,7 +3,7 @@ plugins {
     id 'fabric-loom' version '1.7-SNAPSHOT'
     // Mod Hosting Publish
     id 'com.matthewprenger.cursegradle' version '1.4.0'
-    id 'com.modrinth.minotaur' version '2.2.0'
+    id 'com.modrinth.minotaur' version '2.8.7'
 }
 
 archivesBaseName = "${archives_base_name}-Fabric"
@@ -106,7 +106,7 @@ if (hasProperty('curseForgeApiKey')) {
             changelog = changelogFile
             releaseType = project.release_type
             addGameVersion project.minecraft_version
-            addGameVersion 'Java 17'
+            addGameVersion 'Java 21'
             addGameVersion 'Fabric'
             addGameVersion 'Quilt'
             mainArtifact(mainArtifactFile) {
