@@ -1,1 +1,1 @@
-Update to use Fireplace Lib 7 / Annotated DI 4
+Update social links
