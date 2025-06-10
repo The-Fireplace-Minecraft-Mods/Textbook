@@ -13,4 +13,4 @@ pluginManagement {
 }
 
 rootProject.name = 'Textbook'
-include('common', 'fabric', 'forge')
+include('common', 'fabric')
