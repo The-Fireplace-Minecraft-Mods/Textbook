@@ -23,7 +23,7 @@ apply plugin: 'org.spongepowered.mixin'
 archivesBaseName = "${archives_base_name}-Forge"
 def mainArtifactFile = layout.buildDirectory.file("libs/${archivesBaseName}-${version}.jar").get().asFile
 def changelogFile = file('../changelog.txt')
-def supportedMinecraftVersions = [project.minecraft_version]
+def supportedMinecraftVersions = [project.minecraft_version, '1.20.3']
 
 sourceSets {
     main {
