@@ -50,6 +50,13 @@ dependencies {
     annotationProcessor "dev.the-fireplace:Annotated-DI-Forge-Processor:${project.annotateddi_version}"
     annotationProcessor "org.spongepowered:mixin:${project.forge_mixin_version}:processor"
 
+    compileOnly("com.google.inject:guice:6.0.0") {
+        exclude(group: 'com.google.guava')
+    }
+    compileOnly 'javax.inject:javax.inject:[1]'
+    compileOnly 'jakarta.inject:jakarta.inject-api:[2.0.1]'
+    compileOnly 'aopalliance:aopalliance:[1.0]'
+
     //runtimeOnly(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${project.forge_clothconfig_version}"))
 
     compileOnly project(":common")
