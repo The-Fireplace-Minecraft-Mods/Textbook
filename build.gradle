@@ -17,9 +17,9 @@ subprojects { Project subProject ->
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
     group = project.maven_group
     version = "${project.mod_version}+${project.minecraft_version}"
@@ -29,7 +29,7 @@ subprojects { Project subProject ->
 
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = 'UTF-8'
-        it.options.release.set(17)
+        it.options.release.set(21)
     }
 
     javadoc.options.addStringOption('Xdoclint:none', '-quiet')
