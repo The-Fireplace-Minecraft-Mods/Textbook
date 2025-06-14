@@ -1,0 +1,18 @@
+{
+    "modmenu.descriptionTranslation.textbook": "Importuj i eksportuj książki Minecrafta za pomocą plików tekstowych.",
+    "gui.textbook.import": "Importuj z pliku",
+    "gui.textbook.import_clip": "Importuj ze schowka",
+    "gui.textbook.export": "Eksportuj do pliku",
+    "gui.textbook.import.dialog_title": "Importuj z pliku tekstowego",
+    "gui.textbook.import.text_files": "pliki tekstowe",
+    "gui.textbook.export.dialog_title": "Eksportuj do pliku tekstowego",
+    "gui.textbook.volume_confirm": "Wybierz tom %s z %s.",
+    "gui.textbook.volume_up": "Zwiększ numer tomu",
+    "gui.textbook.volume_down": "Zmniejsz numer tomu",
+    "gui.textbook.export.preserve_whitespace": "Zachowaj białe znaki",
+    "text.config.textbook.title": "Konfiguracja Textbook",
+    "text.config.textbook.option.pageByteLimit": "Limit bajtów na stronę",
+    "text.config.textbook.option.pageByteLimit.desc[0]": "Ogranicza liczbę bajtów, które może zawierać jedna strona.",
+    "text.config.textbook.option.pageByteLimit.desc[1]": "Przydatne na serwerach, które wymuszają limity za pomocą modów/pluginów takich jak Paper.",
+    "text.config.textbook.option.pageByteLimit.desc[2]": "Ustaw na 0, aby wyłączyć limit bajtów."
+}
