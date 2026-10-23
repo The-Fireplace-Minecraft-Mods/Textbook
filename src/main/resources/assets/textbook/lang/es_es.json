@@ -1,0 +1,12 @@
+{
+    "gui.textbook.import": "Importar de archivo",
+    "gui.textbook.import_clip": "Importar de portapapeles",
+    "gui.textbook.export": "Exportar a archivo",
+    "gui.textbook.import.dialog_title": "Importar de archivo de texto",
+    "gui.textbook.import.text_files": "archivos de texto",
+    "gui.textbook.export.dialog_title": "Exportar a archivo de texto",
+    "gui.textbook.volume_confirm": "Seleccionar Volumen %s de %s.",
+    "gui.textbook.volume_up": "Subir Volumen",
+    "gui.textbook.volume_down": "Bajar Volumen",
+    "gui.textbook.export.preserve_whitespace": "Mantener Espacio En Blanco"
+}

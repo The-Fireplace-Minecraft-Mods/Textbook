@@ -1,12 +1,53 @@
-# Textbook
-[![CurseForge](http://cf.way2muchnoise.eu/short_408199_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/textbook)
-![Modrinth](https://img.shields.io/modrinth/dt/bVkN6vx9)
-![Maven Central Version](https://img.shields.io/maven-central/v/dev.the-fireplace/Textbook-Common)
-![GitHub License](https://img.shields.io/github/license/The-Fireplace-Minecraft-Mods/Textbook)
+# Textbook — NeoForge port
 
-A client-side Minecraft mod that allows importing books from and exporting books to text files.
+Unofficial NeoForge port of [Textbook](https://github.com/The-Fireplace-Minecraft-Mods/Textbook) by The_Fireplace.
 
-## Current Target Game Versions
-New releases are not planned to occur outside of these version ranges. Existing versions outside these ranges may still function, but are no longer supported.
-- Fabric: Minecraft 1.17.1 - Current
-- Forge: Minecraft 1.18.2 - 1.20.4
+## What it does
+
+Import text from `.txt` files or the clipboard into writable books, and export
+written books to `.txt` files. Supports splitting long imports across multiple
+100-page volumes, with the title automatically suffixed `-01`, `-02`, etc.
+
+## Why this port exists
+
+The original Textbook depends on **Fireplace Lib** and **Annotated DI**, both
+Fabric-only libraries. There is no NeoForge build, so NeoForge users had no way
+to use Textbook. This port reimplements the dependency surface using NeoForge's
+native APIs and removes both libraries entirely.
+
+## Compatibility
+
+- Minecraft 1.21.1
+- NeoForge 21.1.x (tested on 21.1.249)
+- Java 21
+- Client-side only
+
+## Installation
+
+Drop the JAR into your `mods/` folder. No additional dependencies required.
+
+## Configuration
+
+One client-side config option, `pageByteLimit`, available via the Mods menu → Config:
+- `0` = no limit (vanilla 1024 chars / 128 lines per page applies)
+- Any positive integer = max UTF-8 bytes per page (useful on Paper servers that
+  enforce byte limits)
+
+## Building from source
+
+```bash
+./gradlew :build
+```
+
+The JAR will appear in `build/libs/`.
+
+## Credits
+
+- Original mod: **The_Fireplace** — https://github.com/The-Fireplace-Minecraft-Mods/Textbook
+- NeoForge port: this repository's contributors
+
+## License
+
+Mozilla Public License 2.0 (MPL-2.0). See [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md).
+
+This project is not affiliated with or endorsed by The_Fireplace.
